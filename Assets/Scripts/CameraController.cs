@@ -11,12 +11,13 @@ public class CameraController : MonoBehaviour
     void Start()
     {
         offset = transform.position - target.position;
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.position = target.position + offset;
+        Vector3 tmp = target.position + offset;
+        transform.position = new Vector3(tmp.x, tmp.y, 0);
     }
 }

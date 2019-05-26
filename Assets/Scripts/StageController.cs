@@ -14,23 +14,51 @@ public class StageController : MonoBehaviour
         int width = (int)(transform.localScale.x * 10 + 1);
         int height = (int)(transform.localScale.z * 10 + 1);
 
-        float posX = ((transform.localScale.x * 10 - 1) / 2) * - 1;
-        float posZ = ((transform.localScale.z * 10 - 1) / 2);
+        float posX;
+        float posY = -0.5f;
+        float posZ;
 
         // top line
+        posX = ((transform.localScale.x * 10 - 1) / 2) * -1;
+        posZ = ((transform.localScale.z * 10 - 1) / 2);
         for (int i = 0; i < width; i++)
         {
-
             GameObject HardBlock = Instantiate(HardBlockPrefab);
-            HardBlock.transform.position = new Vector3(posX + i, 0, posZ);
+            HardBlock.transform.position = new Vector3(posX + i, posY, posZ);
         }
 
+        // 
         for (int i = 1; i < height; i++)
         {
-            for (int j = 0; j < width; j++)
+            if (i % 2 != 0)
             {
+                GameObject HardBlock;
 
+                HardBlock = Instantiate(HardBlockPrefab);
+                HardBlock.transform.position = new Vector3(posX + 0, posY, posZ - i);
+
+                HardBlock = Instantiate(HardBlockPrefab);
+                HardBlock.transform.position = new Vector3(posX + width - 1, posY, posZ - i);
             }
+            else
+            {
+                for (int j = 0; j < width; j++)
+                {
+                    if (j % 2 == 0)
+                    {
+                        GameObject HardBlock = Instantiate(HardBlockPrefab);
+                        HardBlock.transform.position = new Vector3(posX + j, posY, posZ - i);
+                    }
+                }
+            }
+        }
+
+        // bottom line
+        posZ = ((transform.localScale.z * 10 - 1) / 2) * -1;
+        for (int i = 0; i < width; i++)
+        {
+            GameObject HardBlock = Instantiate(HardBlockPrefab);
+            HardBlock.transform.position = new Vector3(posX + i, posY, posZ);
         }
     }
 

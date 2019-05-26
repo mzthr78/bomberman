@@ -1,9 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-public class TitleController : MonoBehaviour
+public class StartButtonController : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
@@ -14,9 +13,6 @@ public class TitleController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) || Input.anyKeyDown)
-        {
-            SceneManager.LoadScene("LoadScene");
-        }
+        
     }
 }
