@@ -7,21 +7,44 @@ using UnityEngine.UI;
 public class TitleController : MonoBehaviour
 {
     public Button StartButton;
+    public Button RankingButton;
+    public Button OptionButton;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        StartButton.GetComponent<Button>();
+        RankingButton.GetComponent<Button>();
+        OptionButton.GetComponent<Button>();
+
+        StartButton.onClick.AddListener(() => LoadLoadScene());
+        RankingButton.onClick.AddListener(() => LoadRankingScene());
+        OptionButton.onClick.AddListener(() => LoadOptionScene());
     }
 
     // Update is called once per frame
     void Update()
     {
+        /*
         if (Input.GetMouseButtonDown(0) || Input.anyKeyDown)
         {
             SceneManager.LoadScene("LoadScene");
         }
-
+        */
     }
 
+    void LoadLoadScene()
+    {
+        SceneManager.LoadScene("LoadScene");
+    }
+
+    void LoadRankingScene()
+    {
+        SceneManager.LoadScene("RankingScene");
+    }
+
+    void LoadOptionScene()
+    {
+        SceneManager.LoadScene("OptionScene");
+    }
 }

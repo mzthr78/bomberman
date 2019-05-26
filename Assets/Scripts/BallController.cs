@@ -12,7 +12,7 @@ public class BallController : MonoBehaviour
     void Start()
     {
         rgbody = GetComponent<Rigidbody>();
-        transform.position = stage.transform.localScale
+//        transform.position = stage.transform.localScale
     }
 
     // Update is called once per frame
