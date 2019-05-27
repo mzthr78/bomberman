@@ -13,10 +13,6 @@ public class TitleController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        StartButton.GetComponent<Button>();
-        RankingButton.GetComponent<Button>();
-        OptionButton.GetComponent<Button>();
-
         StartButton.onClick.AddListener(() => LoadLoadScene());
         RankingButton.onClick.AddListener(() => LoadRankingScene());
         OptionButton.onClick.AddListener(() => LoadOptionScene());

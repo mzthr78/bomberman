@@ -297,6 +297,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MousePosition: {fileID: 774631800}
   stage: {fileID: 1177462911}
+  player: {fileID: 848733170}
 --- !u!4 &694150009
 Transform:
   m_ObjectHideFlags: 0
@@ -626,7 +627,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee5f046300c6549f991d669ac4dac848, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stage: {fileID: 0}
+  bombPrefab: {fileID: 7633238590138312590, guid: 0edf916022579496ca09595c9e1c35cf,
+    type: 3}
 --- !u!135 &848733173
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -901,7 +903,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24a7f248c768545fa9e1cf5fbbd7aadd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HardBlockPrefab: {fileID: 2977751171371186979, guid: 9468441be32574518a09ba0e89a184ae,
+  HardBlockPrefab: {fileID: 4174440983739849152, guid: 9468441be32574518a09ba0e89a184ae,
     type: 3}
 --- !u!1 &1534286567
 GameObject:

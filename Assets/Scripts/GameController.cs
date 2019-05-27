@@ -8,11 +8,18 @@ public class GameController : MonoBehaviour
 {
     public Text MousePosition;
     public GameObject stage;
+    public GameObject player;
 
+    private void Awake()
+    {
+        float posX = ((stage.transform.localScale.x * 10 - 1) / 2) * -1 + 1;
+        float posZ = ((stage.transform.localScale.z * 10 - 1) / 2) - 1;
+
+        player.transform.position = new Vector3(posX, 0, posZ);
+    }
     // Start is called before the first frame update
     void Start()
     {
-        
     }
 
     // Update is called once per frame

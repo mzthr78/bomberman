@@ -9,8 +9,6 @@ public class StageController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log(transform.localScale);
-
         int width = (int)(transform.localScale.x * 10 + 1);
         int height = (int)(transform.localScale.z * 10 + 1);
 
@@ -18,7 +16,7 @@ public class StageController : MonoBehaviour
         float posY = -0.5f;
         float posZ;
 
-        // top line
+        // top(0) line
         posX = ((transform.localScale.x * 10 - 1) / 2) * -1;
         posZ = ((transform.localScale.z * 10 - 1) / 2);
         for (int i = 0; i < width; i++)
@@ -27,7 +25,7 @@ public class StageController : MonoBehaviour
             HardBlock.transform.position = new Vector3(posX + i, posY, posZ);
         }
 
-        // 
+        // 1 .. n - 1 line
         for (int i = 1; i < height; i++)
         {
             if (i % 2 != 0)
@@ -53,7 +51,7 @@ public class StageController : MonoBehaviour
             }
         }
 
-        // bottom line
+        // bottom(n) line
         posZ = ((transform.localScale.z * 10 - 1) / 2) * -1;
         for (int i = 0; i < width; i++)
         {
@@ -62,9 +60,4 @@ public class StageController : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

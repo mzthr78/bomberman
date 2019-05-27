@@ -4,15 +4,14 @@ using UnityEngine;
 
 public class BallController : MonoBehaviour
 {
-    public GameObject stage;
     Rigidbody rgbody;
     float power = 5f;
+    public GameObject bombPrefab;
 
     // Start is called before the first frame update
     void Start()
     {
         rgbody = GetComponent<Rigidbody>();
-//        transform.position = stage.transform.localScale
     }
 
     // Update is called once per frame
