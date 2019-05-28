@@ -13,7 +13,7 @@ public class StageController : MonoBehaviour
         int height = (int)(transform.localScale.z * 10 + 1);
 
         float posX;
-        float posY = -0.3f;
+        float posY = 0f;
         float posZ;
 
         // top(0) line
