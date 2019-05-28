@@ -22,16 +22,15 @@ public class CameraController : MonoBehaviour
         switch (vp)
         {
             case ViewPoint.Diagonally:
-                offset = new Vector3(0, 6, -7) - new Vector3(0, 0, 0);
-                transform.rotation = Quaternion.Euler(52, 0, 0);
-                posZ = -7;
+                offset = new Vector3(0, 4.5f, -3.5f) - new Vector3(0, 0, 0);
+                transform.rotation = Quaternion.Euler(55, 0, 0);
                 break;
             default: //case ViewPoint.Right:
                 offset = new Vector3(0, 11, 0) - new Vector3(0, 0, 0);
                 transform.rotation = Quaternion.Euler(90, 0, 0);
-                posZ = 0;
                 break;
         }
+        posZ = 0;
     }
 
     // Start is called before the first frame update
@@ -52,6 +51,13 @@ public class CameraController : MonoBehaviour
         }
 
         Vector3 tmp = target.position + offset;
-        transform.position = new Vector3(tmp.x, tmp.y, posZ); // Diagonally
+        if (viewPoint == ViewPoint.Diagonally)
+        {
+            transform.position = tmp;
+        }
+        else
+        {
+            transform.position = new Vector3(tmp.x, tmp.y, posZ); // Diagonally
+        }
     }
 }
