@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class TitleController : MonoBehaviour
 {
+    public Text Platform;
+
     public Button StartButton;
     public Button RankingButton;
     public Button OptionButton;
@@ -16,6 +18,11 @@ public class TitleController : MonoBehaviour
         StartButton.onClick.AddListener(() => LoadLoadScene());
         RankingButton.onClick.AddListener(() => LoadRankingScene());
         OptionButton.onClick.AddListener(() => LoadOptionScene());
+
+        Platform.text = "";
+
+        Platform.text = Application.platform.ToString();
+
     }
 
     // Update is called once per frame

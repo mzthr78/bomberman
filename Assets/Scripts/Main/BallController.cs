@@ -6,7 +6,6 @@ public class BallController : MonoBehaviour
 {
     Rigidbody rgbody;
     float power = 5f;
-    public GameObject bombPrefab;
 
     // Start is called before the first frame update
     void Start()
