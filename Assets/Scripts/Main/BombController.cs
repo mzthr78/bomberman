@@ -37,10 +37,19 @@ public class BombController : MonoBehaviour
         Fire  = Instantiate(FirePrefab);
         Fire.transform.position = transform.position;
 
-        for (int i = 0; i < 4; i++)
+        int explode = 2;
+
+        for (int j = 0; j < explode; j++)
         {
-            Fire = Instantiate(FirePrefab);
-            Fire.transform.position = new Vector3(transform.position.x + dx[i], transform.position.y, transform.position.z + dz[i]);
+            for (int i = 0; i < 4; i++)
+            {
+                Fire = Instantiate(FirePrefab);
+                //Fire.transform.position = new Vector3(transform.position.x + dx[i], transform.position.y, transform.position.z + dz[i]);
+
+                Vector3 power = new Vector3(dx[i] * (j + 1), 0, dz[i] * (j + 1));
+                Fire.GetComponent<FireController>().SetPower(power);
+                Fire.transform.position = transform.position;
+            }
         }
 
         Destroy(gameObject);
