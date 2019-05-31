@@ -5,6 +5,7 @@ using UnityEngine;
 public class StageController : MonoBehaviour
 {
     public GameObject HardBlockPrefab;
+    public GameObject SoftBlockPrefab;
 
     // Start is called before the first frame update
     void Start()
