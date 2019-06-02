@@ -7,11 +7,14 @@ public class StageController : MonoBehaviour
     public GameObject HardBlockPrefab;
     public GameObject SoftBlockPrefab;
 
+    int width = 0;
+    int height = 0;
+
     // Start is called before the first frame update
     void Start()
     {
-        int width = (int)(transform.localScale.x * 10 + 1);
-        int height = (int)(transform.localScale.z * 10 + 1);
+        width = (int)(transform.localScale.x * 10 + 1);
+        height = (int)(transform.localScale.z * 10 + 1);
 
         float posX;
         float posY = 0f;
