@@ -4,22 +4,28 @@ using UnityEngine;
 
 public class ItemController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    PlayerController player;
+
+    private void Awake()
     {
-        
+        player = GameObject.Find("Sphere").GetComponent<PlayerController>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerEnter(Collider other)
     {
-        
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.tag == "Player")
+        if (other.gameObject.tag == "Player")
         {
+            Debug.Log(tag + " get!!!");
+            switch (tag)
+            {
+                case "PowerUp_Fire":
+                    player.IncreaseFirePower();
+                    break;
+                case "PowerUp_Bnum":
+                    player.IncreaseBombMax();
+                    break;
+            }
+
             Destroy(gameObject);
         }
     }

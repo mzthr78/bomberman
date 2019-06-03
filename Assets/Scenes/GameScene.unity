@@ -279,11 +279,23 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 526351106}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.014999999, y: 0.0029999993, z: 0.014999999}
   m_Center: {x: 0.00019999965, y: -0.000012885371, z: 0.00010000355}
+--- !u!114 &526351108
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 526351106}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac8cd4b0b141b4ddc8e9b116e4c40621, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &575538469 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -927199367670048503, guid: 6e037068328b948a1973f8d8e4754915,
@@ -859,7 +871,12 @@ PrefabInstance:
     - target: {fileID: -927199367670048503, guid: 8b2da971409a243b9b79d682754a1fd2,
         type: 3}
       propertyPath: m_Name
-      value: powerup_num
+      value: powerup_bnum
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 8b2da971409a243b9b79d682754a1fd2,
+        type: 3}
+      propertyPath: m_TagString
+      value: PowerUp_Bnum
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 8b2da971409a243b9b79d682754a1fd2,
         type: 3}
@@ -1039,9 +1056,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24a7f248c768545fa9e1cf5fbbd7aadd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GameController: {fileID: 694150007}
   HardBlockPrefab: {fileID: 8713990489523450641, guid: e61157b5cba9a4bef9431a5d41520492,
     type: 3}
-  SoftBlockPrefab: {fileID: 0}
+  SoftBlockPrefab: {fileID: 4057321060184638265, guid: 2ec2886eb661c4d23b2ff399a40235b7,
+    type: 3}
 --- !u!65 &1177462917
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1342,11 +1361,23 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1571672009}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.014999999, y: 0.0029999993, z: 0.014999999}
   m_Center: {x: 4.6566126e-10, y: 0.0000000012223608, z: 0.000100004014}
+--- !u!114 &1571672011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1571672009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac8cd4b0b141b4ddc8e9b116e4c40621, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &3970975724998416909
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1358,6 +1389,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: powerup_fire
+      objectReference: {fileID: 0}
+    - target: {fileID: 4916330417966879043, guid: 8cd3d5bc8674f411786af9118528592d,
+        type: 3}
+      propertyPath: m_TagString
+      value: PowerUp_Fire
       objectReference: {fileID: 0}
     - target: {fileID: 8241879441610629968, guid: 8cd3d5bc8674f411786af9118528592d,
         type: 3}

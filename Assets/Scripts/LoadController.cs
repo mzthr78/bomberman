@@ -5,16 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class LoadController : MonoBehaviour
 {
-    // Start is called before the first frame update
     void Start()
     {
         StartCoroutine(LoadGameScene());
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     IEnumerator LoadGameScene()

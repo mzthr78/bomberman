@@ -4,25 +4,16 @@ using UnityEngine;
 
 public class SoftBlockController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public GameObject DoorPrefab;
+    public GameObject ItemFirePrefab;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    bool isItem = false;
+    bool isDoor = false;
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("n?");
-
         if (other.tag == "Fire")
         {
-            Debug.Log("explosion!");
             StartCoroutine(Broken());
         }
     }

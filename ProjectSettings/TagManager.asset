@@ -5,6 +5,11 @@ TagManager:
   serializedVersion: 2
   tags:
   - Fire
+  - Bomb
+  - Enemy
+  - Item
+  - PowerUp_Fire
+  - PowerUp_Bnum
   layers:
   - Default
   - TransparentFX

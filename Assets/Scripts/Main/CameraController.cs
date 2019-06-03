@@ -9,18 +9,6 @@ enum ViewPoint
     Dummy = 2,
 }
 
-public enum BObjects
-{
-    None,
-    Player,
-    Bomb,
-    Door,
-    HardBlock,
-    SoftBlock,
-    PowerUpItem,
-    Enemy,
-}
-
 public class CameraController : MonoBehaviour
 {
     public Transform target;
@@ -28,8 +16,6 @@ public class CameraController : MonoBehaviour
     ViewPoint viewPoint = ViewPoint.Right;
     float posY;
     float posZ;
-
-    List<List<BObjects>> bobjs;
 
     // Start is called before the first frame update
     void Start()
@@ -44,7 +30,6 @@ public class CameraController : MonoBehaviour
         {
             viewPoint++;
             if (viewPoint == ViewPoint.Dummy) viewPoint = 0;
-            Debug.Log("vp = " + viewPoint);
             InitCameraPosition(viewPoint);
         }
 
@@ -75,44 +60,4 @@ public class CameraController : MonoBehaviour
         posZ = 0;
     }
 
-    int maxRow = 13;
-    int maxCol = 31;
-
-    void InitBObjects()
-    {
-        for (int i = 0; i < maxRow; i++)
-        {
-            List<BObjects> tmpLine = new List<BObjects>();
-
-            for (int j = 0; j < maxCol; j++)
-            {
-                BObjects tmpCol = BObjects.None;
-
-                // top, bottom, right, left wall
-                if (i == 0 || i == (maxRow - 1) || j == 0 || j == (maxCol - 1))
-                {
-                    tmpCol = BObjects.HardBlock;
-                }
-                // HardBlock
-                else if (i % 2 == 0 && j % 2 ==0)
-                {
-                    tmpCol = BObjects.HardBlock;
-                }
-                // Player
-                else if (i == 1 && j == 1)
-                {
-                    tmpCol = BObjects.Player;
-                }
-                // Player right side, bottom side
-                else if ((i == 1 && j == 2) || (i == 2 && j == 1))
-                {
-
-                }
-
-                tmpLine.Add(tmpCol);
-            }
-
-            bobjs.Add(tmpLine);
-        }
-    }
 }

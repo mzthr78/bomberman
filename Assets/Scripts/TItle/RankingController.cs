@@ -14,12 +14,6 @@ public class RankingController : MonoBehaviour
         Return2TitleButton.onClick.AddListener(() => LoadTitleScene());
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     void LoadTitleScene()
     {
         SceneManager.LoadScene("TitleScene");

@@ -20,20 +20,8 @@ public class TitleController : MonoBehaviour
         OptionButton.onClick.AddListener(() => LoadOptionScene());
 
         Platform.text = "";
-
         Platform.text = Application.platform.ToString();
 
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        /*
-        if (Input.GetMouseButtonDown(0) || Input.anyKeyDown)
-        {
-            SceneManager.LoadScene("LoadScene");
-        }
-        */
     }
 
     void LoadLoadScene()

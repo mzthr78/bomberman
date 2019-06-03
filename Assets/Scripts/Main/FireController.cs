@@ -4,7 +4,12 @@ using UnityEngine;
 
 public class FireController : MonoBehaviour
 {
-    float span = 3f;
+    public GameObject GameController;
+    GameController controller;
+
+    List<List<BMObj>> map;
+
+    float span = 2.5f;
     float delta = 0;
 
     Vector3 power = new Vector3(0, 0, 0);
@@ -26,6 +31,12 @@ public class FireController : MonoBehaviour
         journeyLength = Vector3.Distance(transform.position, (transform.position + power));
 
         target = transform.position + power;
+
+        /*
+        GameController = GameObject.Find("GameController");
+        controller = GameController.GetComponent<GameController>();
+        map = controller.GetMap();
+        */      
     }
 
     // Update is called once per frame
