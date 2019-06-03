@@ -49,7 +49,7 @@ public class CameraController : MonoBehaviour
         switch (vp)
         {
             case ViewPoint.Diagonally:
-                offset = new Vector3(0, 7f, -7.5f) - new Vector3(0, 0, 0);
+                offset = new Vector3(0, 5.5f, -6f) - new Vector3(0, 0, 0);
                 transform.rotation = Quaternion.Euler(50, 0, 0);
                 break;
             default: //case ViewPoint.Right:
@@ -59,5 +59,4 @@ public class CameraController : MonoBehaviour
         }
         posZ = 0.5f;
     }
-
 }
