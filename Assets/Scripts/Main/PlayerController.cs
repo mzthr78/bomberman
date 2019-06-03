@@ -1,14 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
     GameController controller;
 
+    public Text FirePowerText;
+    public Text BombMaxText;
+    public Text BombRemainText;
+
     int FirePower = 1;
     int BombMax = 1;
-    int BombCount = 0;
+    int BombRemain = 1;
 
     public GameObject BombPrefab;
 
@@ -23,22 +28,22 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Vector3 pos = new Vector3(Mathf.Round(transform.position.x), transform.position.y, Mathf.Round(transform.position.z));
-            if (BombCount < BombMax && (controller.GetObj(pos) == BMObj.Empty || controller.GetObj(pos) == BMObj.None))
+            if (BombRemain > 0 && (controller.GetObj(pos) == BMObj.Empty || controller.GetObj(pos) == BMObj.None))
             {
                 GameObject Bomb = Instantiate(BombPrefab, pos, Quaternion.identity);
 
                 controller.SetObj(pos, BMObj.Bomb);
 
-                this.BombCount++;
-            }
-            else
-            {
-                Debug.Log("Bomb set incorrect !!!");
-                Debug.Log("BombCount=" + BombCount);
-                Debug.Log("BombMax=" + BombMax);
-                Debug.Log("obj=" + controller.GetObj(pos));
+                this.BombRemain--;
             }
         }
+
+        BombRemain = BombMax - GameObject.FindGameObjectsWithTag("Bomb").Length;
+
+        FirePowerText.text = "FirePower = " + FirePower.ToString();
+        BombMaxText.text = "BombMax = " + BombMax.ToString();
+        BombRemainText.text = "BombRemain = " + BombRemain.ToString();
+
     }
 
     public void IncreaseFirePower()
@@ -49,6 +54,7 @@ public class PlayerController : MonoBehaviour
     public void IncreaseBombMax()
     {
         this.BombMax++;
+        this.BombRemain++;
     }
 
     public int GetFirePower()
@@ -56,8 +62,9 @@ public class PlayerController : MonoBehaviour
         return this.FirePower;
     }
 
-    public void DecreaseBombCount()
+    public int GetBombMax()
     {
-        if (this.BombCount > 0) { this.BombCount--; }
+        return this.BombMax;
     }
+
 }

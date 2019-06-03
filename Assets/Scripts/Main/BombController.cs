@@ -81,7 +81,6 @@ public class BombController : MonoBehaviour
         }
 
         controller.SetObj(gameObject.transform.position, BMObj.Empty);
-        player.DecreaseBombCount();
 
         Destroy(gameObject);
 

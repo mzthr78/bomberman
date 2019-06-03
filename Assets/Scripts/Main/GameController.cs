@@ -23,6 +23,7 @@ public class GameController : MonoBehaviour
     public Text MousePosition;
     public GameObject stage;
     public GameObject player;
+    PlayerController pcon;
 
     int stageNum = 1;
     int maxStage = 50;
@@ -33,6 +34,8 @@ public class GameController : MonoBehaviour
     {
         float posX = ((stage.transform.localScale.x * 10 - 1) / 2) * -1 + 1;
         float posZ = ((stage.transform.localScale.z * 10 - 1) / 2) - 1;
+
+        pcon = player.GetComponent<PlayerController>();
 
         player.transform.position = new Vector3(posX, 0, posZ);
     }
@@ -117,9 +120,6 @@ public class GameController : MonoBehaviour
         int maxRow = stage.GetComponent<StageController>().GetHeight();
         int maxCol = stage.GetComponent<StageController>().GetWidth();
 
-
-        Debug.Log(maxRow + ", " + maxCol);
-
         for (int i = 0; i < maxRow; i++)
         {
             List<BMObj> tmpLine = new List<BMObj>();
@@ -166,4 +166,5 @@ public class GameController : MonoBehaviour
     {
         return this.map;
     }
+
 }
