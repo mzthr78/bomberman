@@ -90,6 +90,10 @@ public class StageController : MonoBehaviour
                     case BMObj.SoftBlock:
                         SoftBlock = Instantiate(SoftBlockPrefab, pos, Quaternion.identity);
                         break;
+                    case BMObj.Door:
+                        SoftBlock = Instantiate(SoftBlockPrefab, pos, Quaternion.identity);
+                        SoftBlock.GetComponent<SoftBlockController>().SetIsDoor();
+                        break;
                     case BMObj.Item:
                         SoftBlock = Instantiate(SoftBlockPrefab, pos, Quaternion.identity);
                         SoftBlock.GetComponent<SoftBlockController>().SetIsItem();

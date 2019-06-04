@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 6976786256789194701}
   - component: {fileID: -7681193766996936118}
   m_Layer: 0
-  m_Name: hardblockPrefab
-  m_TagString: Untagged
+  m_Name: HardBlockPrefab
+  m_TagString: HardBlock
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

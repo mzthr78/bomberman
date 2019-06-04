@@ -9,7 +9,7 @@ public class FireController : MonoBehaviour
 
     List<List<BMObj>> map;
 
-    float span = 2.5f;
+    float span = 1.4f;
     float delta = 0;
 
     Vector3 power = new Vector3(0, 0, 0);
@@ -53,5 +53,19 @@ public class FireController : MonoBehaviour
         float distCovered = (Time.time - startTime) * speed;
         float fracJourney = distCovered / journeyLength;
         transform.position = Vector3.Lerp(transform.position, target, fracJourney);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "SoftBlock")
+        {
+            StartCoroutine(FadeOut());
+        }
+    }
+
+    IEnumerator FadeOut()
+    {
+        yield return new WaitForSeconds(0.4f);
+        Destroy(gameObject);
     }
 }

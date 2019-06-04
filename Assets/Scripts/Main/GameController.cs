@@ -39,13 +39,11 @@ public class GameController : MonoBehaviour
 
         player.transform.position = new Vector3(posX, 0, posZ);
     }
-    // Start is called before the first frame update
+
     void Start()
     {
         InitSeed();
         InitBObjects();
-
-        Debug.Log(name + " map count=" + map.Count);
     }
 
     // Update is called once per frame
@@ -98,13 +96,16 @@ public class GameController : MonoBehaviour
         // hardblock = 14 * 5 = 70
         // walkable = 319 - 70 = 249
 
-        int SoftBlockCount = 1 + (stageNum - 1);
+        int SoftBlockCount = 2 + (stageNum - 1);
 
         // Empty
         List<BMObj> tmp = Enumerable.Repeat(BMObj.None, 246 - (SoftBlockCount)).ToList();
 
         // SoftBlock
         tmp.AddRange(Enumerable.Repeat(BMObj.SoftBlock, SoftBlockCount).ToList());
+
+        // Door
+        tmp.Add(BMObj.Door);
 
         // Item
         tmp.Add(BMObj.Item);
@@ -140,7 +141,7 @@ public class GameController : MonoBehaviour
                     tmpCol = BMObj.HardBlock;
                 }
                 // HardBlock
-                else if (i % 2 == 0 && j % 2 == 0)
+                else if ((i % 2 == 0) && (j % 2 == 0))
                 {
                     tmpCol = BMObj.HardBlock;
                 }
@@ -163,6 +164,17 @@ public class GameController : MonoBehaviour
                     }
                 }
                 tmpLine.Add(tmpCol);
+
+                char c = ' ';
+                switch (tmpCol)
+                {
+                    case BMObj.HardBlock:
+                        c = '#';
+                        break;
+                    case BMObj.SoftBlock:
+                        c = '%';
+                        break;
+                }
             }
             map.Add(tmpLine);
         }
@@ -173,4 +185,8 @@ public class GameController : MonoBehaviour
         return this.map;
     }
 
+    public void StageClear()
+    {
+        SceneManager.LoadScene("LoadScene");
+    }
 }

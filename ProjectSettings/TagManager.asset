@@ -10,6 +10,8 @@ TagManager:
   - Item
   - PowerUp_Fire
   - PowerUp_Bnum
+  - SoftBlock
+  - HardBlock
   layers:
   - Default
   - TransparentFX

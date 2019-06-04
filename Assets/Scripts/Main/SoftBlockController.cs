@@ -18,9 +18,14 @@ public class SoftBlockController : MonoBehaviour
         controller = GameObject.Find("GameController").GetComponent<GameController>();
     }
 
-    public void SetIsItem()
+    public void SetIsDoor(bool b = true)
     {
-        this.isItem = true;
+        this.isDoor = b;
+    }
+
+    public void SetIsItem(bool b = true)
+    {
+        this.isItem = b;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -33,7 +38,12 @@ public class SoftBlockController : MonoBehaviour
 
     IEnumerator Broken()
     {
-        if (isItem)
+        if (isDoor)
+        {
+            GameObject Door = Instantiate(DoorPrefab, transform.position, Quaternion.Euler(10, 180, 0));
+            controller.SetObj(transform.position, BMObj.Door);
+        }
+        else if (isItem)
         {
             GameObject ItemFire = Instantiate(ItemFirePrefab, transform.position, Quaternion.Euler(10, 180, 0));
             controller.SetObj(transform.position, BMObj.Item);

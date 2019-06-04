@@ -10,7 +10,7 @@ public class BombController : MonoBehaviour
     public GameObject FirePrefab;
 
     float delta = 0;
-    float span = 5f;
+    float span = 4f;
 
     int[] dx = { 1,  0, -1, 0 };
     int[] dz = { 0, -1,  0, 1 };
@@ -20,7 +20,7 @@ public class BombController : MonoBehaviour
     private void Awake()
     {
         controller = GameObject.Find("GameController").GetComponent<GameController>();
-        player = GameObject.Find("Sphere").GetComponent<PlayerController>();
+        player = GameObject.Find("Player").GetComponent<PlayerController>();
     }
 
     // Update is called once per frame

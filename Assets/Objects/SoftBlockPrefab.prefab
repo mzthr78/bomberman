@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5435683224672292360}
   m_Layer: 0
   m_Name: SoftBlockPrefab
-  m_TagString: Untagged
+  m_TagString: SoftBlock
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -107,4 +107,6 @@ MonoBehaviour:
   DoorPrefab: {fileID: 2214632729711903701, guid: a9daaa77da81f4f9abf41318a340336d,
     type: 3}
   ItemFirePrefab: {fileID: 6708921968435768115, guid: 4db5e47617b90474296e19e165ebb0ec,
+    type: 3}
+  ItemBombPrefab: {fileID: 4312264639094411793, guid: 8bc1da4c60e8442e3a4bc15ed4186a27,
     type: 3}

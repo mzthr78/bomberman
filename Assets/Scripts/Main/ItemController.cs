@@ -10,7 +10,7 @@ public class ItemController : MonoBehaviour
     private void Awake()
     {
         controller = GameObject.Find("GameController").GetComponent<GameController>();
-        player = GameObject.Find("Sphere").GetComponent<PlayerController>();
+        player = GameObject.Find("Player").GetComponent<PlayerController>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -26,7 +26,7 @@ public class ItemController : MonoBehaviour
                     player.IncreaseBombMax();
                     break;
             }
-            controller.SetObj(transform.position, BMObj.Item);
+            controller.SetObj(transform.position, BMObj.Empty);
             Destroy(gameObject);
         }
     }
