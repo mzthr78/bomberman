@@ -83,10 +83,16 @@ public class StageController : MonoBehaviour
 
                 Vector3 pos = new Vector3(posX, posY, posZ);
 
+                GameObject SoftBlock;
+
                 switch (map[i][j])
                 {
                     case BMObj.SoftBlock:
-                        GameObject SoftBlock = Instantiate(SoftBlockPrefab, pos, Quaternion.identity);
+                        SoftBlock = Instantiate(SoftBlockPrefab, pos, Quaternion.identity);
+                        break;
+                    case BMObj.Item:
+                        SoftBlock = Instantiate(SoftBlockPrefab, pos, Quaternion.identity);
+                        SoftBlock.GetComponent<SoftBlockController>().SetIsItem();
                         break;
                     default:
                         break;

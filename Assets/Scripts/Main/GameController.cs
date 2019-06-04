@@ -98,10 +98,16 @@ public class GameController : MonoBehaviour
         // hardblock = 14 * 5 = 70
         // walkable = 319 - 70 = 249
 
-        int SoftBlockCount = 50 + (stageNum - 1);
+        int SoftBlockCount = 1 + (stageNum - 1);
 
+        // Empty
         List<BMObj> tmp = Enumerable.Repeat(BMObj.None, 246 - (SoftBlockCount)).ToList();
+
+        // SoftBlock
         tmp.AddRange(Enumerable.Repeat(BMObj.SoftBlock, SoftBlockCount).ToList());
+
+        // Item
+        tmp.Add(BMObj.Item);
 
         Shuffle(tmp);
 

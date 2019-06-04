@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class ItemController : MonoBehaviour
 {
+    GameController controller;
     PlayerController player;
 
     private void Awake()
     {
+        controller = GameObject.Find("GameController").GetComponent<GameController>();
         player = GameObject.Find("Sphere").GetComponent<PlayerController>();
     }
 
@@ -15,7 +17,6 @@ public class ItemController : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
-            Debug.Log(tag + " get!!!");
             switch (tag)
             {
                 case "PowerUp_Fire":
@@ -25,7 +26,7 @@ public class ItemController : MonoBehaviour
                     player.IncreaseBombMax();
                     break;
             }
-
+            controller.SetObj(transform.position, BMObj.Item);
             Destroy(gameObject);
         }
     }

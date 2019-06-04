@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &4057321060184638265
+--- !u!1 &6708921968435768115
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,47 +8,47 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1014956817535643946}
-  - component: {fileID: 8308823991949036316}
-  - component: {fileID: 2338025771493652453}
-  - component: {fileID: 5435683224672292363}
-  - component: {fileID: 5435683224672292360}
+  - component: {fileID: 7728662003270244640}
+  - component: {fileID: 1592796094347371286}
+  - component: {fileID: 4982730444702195695}
+  - component: {fileID: 3331271649660312446}
+  - component: {fileID: 3331271649660312441}
   m_Layer: 0
-  m_Name: SoftBlockPrefab
-  m_TagString: Untagged
+  m_Name: powerup_fire
+  m_TagString: PowerUp_Fire
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1014956817535643946
+--- !u!4 &7728662003270244640
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4057321060184638265}
-  m_LocalRotation: {x: 0.000000081460335, y: 0, z: -0, w: 1}
-  m_LocalPosition: {x: 10, y: -0, z: 0}
-  m_LocalScale: {x: 65, y: 65, z: 65}
+  m_GameObject: {fileID: 6708921968435768115}
+  m_LocalRotation: {x: 0.000000012251831, y: 0.9990483, z: -0.043619405, w: 0.00000028061297}
+  m_LocalPosition: {x: 2, y: -0.1488945, z: -0.00025966763}
+  m_LocalScale: {x: 55, y: 55, z: 55}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &8308823991949036316
+  m_LocalEulerAnglesHint: {x: 5, y: 179.99998, z: 0}
+--- !u!33 &1592796094347371286
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4057321060184638265}
-  m_Mesh: {fileID: -1471855311138428714, guid: f3302a599706d491c9b1ed5c1b7f1a72, type: 3}
---- !u!23 &2338025771493652453
+  m_GameObject: {fileID: 6708921968435768115}
+  m_Mesh: {fileID: -3075180363232534472, guid: 998ea8e9876f4445b9b06704d48ded58, type: 3}
+--- !u!23 &4982730444702195695
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4057321060184638265}
+  m_GameObject: {fileID: 6708921968435768115}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -59,7 +59,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 907d07b7933444aabb7917b8cd7aca49, type: 2}
+  - {fileID: 2100000, guid: 14160b64afc814922a405800badfab56, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -79,32 +79,28 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &5435683224672292363
+--- !u!65 &3331271649660312446
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4057321060184638265}
+  m_GameObject: {fileID: 6708921968435768115}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.014999999, y: 0.014999999, z: 0.014999999}
-  m_Center: {x: 4.6566126e-10, y: 0, z: 0.000000005587935}
---- !u!114 &5435683224672292360
+  m_Size: {x: 0.014999999, y: 0.0029999993, z: 0.014999999}
+  m_Center: {x: 0.00019999965, y: -0.000012885371, z: 0.00010000355}
+--- !u!114 &3331271649660312441
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4057321060184638265}
+  m_GameObject: {fileID: 6708921968435768115}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f5e2435389f6411196bfcdffccced62, type: 3}
+  m_Script: {fileID: 11500000, guid: ac8cd4b0b141b4ddc8e9b116e4c40621, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DoorPrefab: {fileID: 2214632729711903701, guid: a9daaa77da81f4f9abf41318a340336d,
-    type: 3}
-  ItemFirePrefab: {fileID: 6708921968435768115, guid: 4db5e47617b90474296e19e165ebb0ec,
-    type: 3}

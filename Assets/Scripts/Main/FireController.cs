@@ -54,5 +54,4 @@ public class FireController : MonoBehaviour
         float fracJourney = distCovered / journeyLength;
         transform.position = Vector3.Lerp(transform.position, target, fracJourney);
     }
-
 }

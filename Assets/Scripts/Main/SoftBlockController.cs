@@ -8,6 +8,7 @@ public class SoftBlockController : MonoBehaviour
 
     public GameObject DoorPrefab;
     public GameObject ItemFirePrefab;
+    public GameObject ItemBombPrefab;
 
     bool isItem = false;
     bool isDoor = false;
@@ -15,6 +16,11 @@ public class SoftBlockController : MonoBehaviour
     private void Awake()
     {
         controller = GameObject.Find("GameController").GetComponent<GameController>();
+    }
+
+    public void SetIsItem()
+    {
+        this.isItem = true;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -27,7 +33,15 @@ public class SoftBlockController : MonoBehaviour
 
     IEnumerator Broken()
     {
-        controller.SetObj(transform.position, BMObj.Empty);
+        if (isItem)
+        {
+            GameObject ItemFire = Instantiate(ItemFirePrefab, transform.position, Quaternion.Euler(10, 180, 0));
+            controller.SetObj(transform.position, BMObj.Item);
+        }
+        else
+        {
+            controller.SetObj(transform.position, BMObj.Empty);
+        }
         Destroy(gameObject);
         yield return null;
     }
