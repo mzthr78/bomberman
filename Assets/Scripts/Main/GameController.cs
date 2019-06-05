@@ -18,6 +18,19 @@ public enum BMObj
     Door = 7,
 }
 
+public enum PowerUpItem
+{
+    None = 0,        // なし
+    Fire = 1,　      // 火力
+    Bomb = 2,　      // 爆弾
+    Remote = 3,      // リモコン
+    Speed = 4,       // ブーツ
+    PassBomb = 5,    // 爆弾通過
+    PassWall = 6,    // 壁通過
+    Barrier = 7,     // 火炎バリア
+    Immortality = 8, // パーフェクトマン
+}
+
 public class GameController : MonoBehaviour
 {
     public Text MousePosition;
@@ -25,25 +38,88 @@ public class GameController : MonoBehaviour
     public GameObject player;
     PlayerController pcon;
 
-    int stageNum = 1;
+    public AudioClip StageClearSE;
+
+    static int stageNum = 0;
     int maxStage = 50;
+
+    string ItemString = "012342213562235162523532358123762385731683653865378";
+    public static int[] PlayerStatusNumArr = new int[9] { 0, 1, 1, 0, 0, 0, 0, 0, 0 };
 
     List<List<BMObj>> map = new List<List<BMObj>>();
 
+    public int GetItemPerStage()
+    {
+        return (int)(ItemString[stageNum] - '0');
+    }
+
+    public static void AllInit()
+    {
+        stageNum = 0;
+        PlayerInit();
+    }
+
+    public static void PlayerInit()
+    {
+        PlayerStatusNumArr = new int[9] { 0, 1, 1, 0, 0, 0, 0, 0, 0 };
+    }
+
+    public static void SetStageNum(int num)
+    {
+        stageNum = num;
+    }
+
+    public static int NextStageNum()
+    {
+        return ++stageNum;
+    }
+
+    public static int GetStageNum()
+    {
+        return stageNum;
+    }
+
+    public static int[] GetPlayerStatusNumArr()
+    {
+        return PlayerStatusNumArr;
+    }
+
+    public static int GetPlayerStatusNum(PowerUpItem itemNum)
+    {
+        return PlayerStatusNumArr[(int)itemNum];
+    }
+
+    public static void SetPlayerStatusNum(PowerUpItem itemNum, int num)
+    {
+        PlayerStatusNumArr[(int)itemNum] = num;
+    }
+
+    public static void IncreasePlayerStatusNum(PowerUpItem itemNum)
+    {
+        PlayerStatusNumArr[(int)itemNum]++;
+    }
+
+    AudioSource aud;
+
     private void Awake()
     {
+        if (stageNum == 0) stageNum = 1;
+
         float posX = ((stage.transform.localScale.x * 10 - 1) / 2) * -1 + 1;
         float posZ = ((stage.transform.localScale.z * 10 - 1) / 2) - 1;
 
         pcon = player.GetComponent<PlayerController>();
-
         player.transform.position = new Vector3(posX, 0, posZ);
+
+        aud = GetComponent<AudioSource>();
     }
 
     void Start()
     {
         InitSeed();
         InitBObjects();
+
+        aud.Play();
     }
 
     // Update is called once per frame
@@ -187,6 +263,23 @@ public class GameController : MonoBehaviour
 
     public void StageClear()
     {
+        int[] playerStatus = player.GetComponent<PlayerController>().GetPlayerStatus();
+
+        for (int i = 0; i < playerStatus.Length; i++)
+        {
+            PlayerStatusNumArr[i] = playerStatus[i];
+        }
+
+        StartCoroutine(StageClearProc());
+    }
+
+    IEnumerator StageClearProc()
+    {
+        aud.Stop();
+        aud.PlayOneShot(StageClearSE);
+
+        yield return new WaitForSeconds(3.5f);
+
         SceneManager.LoadScene("LoadScene");
     }
 }

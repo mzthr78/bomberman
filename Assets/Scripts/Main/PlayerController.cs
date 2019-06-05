@@ -21,19 +21,44 @@ public class PlayerController : MonoBehaviour
     public Text BombMaxText;
     public Text BombRemainText;
 
-    int FirePower = 1;
-    int BombMax = 1;
-    int BombRemain = 1;
-
     float speed = 0.04f;
 
     Direction dir = Direction.None;
 
+    int[] PlayerStatus = new int[9];
+
+    int BombRemain = 0;
+
     public GameObject BombPrefab;
+
+    void LoadPlayerStatus()
+    {
+        for (int i = 0; i < PlayerStatus.Length; i++)
+        {
+            PlayerStatus[i] = GameController.GetPlayerStatusNum((PowerUpItem)i);
+        }
+    }
+
+    public int GetPlayerStatus(PowerUpItem num)
+    {
+        return PlayerStatus[(int)num];
+    }
+
+    public int[] GetPlayerStatus()
+    {
+        return PlayerStatus;
+    }
 
     private void Awake()
     {
         controller = GameObject.Find("GameController").GetComponent<GameController>();
+    }
+
+    private void Start()
+    {
+        LoadPlayerStatus();
+
+        BombRemain = PlayerStatus[(int)PowerUpItem.Bomb];
     }
 
     // Update is called once per frame
@@ -68,33 +93,39 @@ public class PlayerController : MonoBehaviour
             Move(Direction.Down);
         }
 
-        BombRemain = BombMax - GameObject.FindGameObjectsWithTag("Bomb").Length;
+        FirePowerText.text = "FirePower = " + PlayerStatus[(int)PowerUpItem.Fire].ToString();
+        BombMaxText.text = "BombMax = " + PlayerStatus[(int)PowerUpItem.Bomb].ToString();
 
-        FirePowerText.text = "FirePower = " + FirePower.ToString();
-        BombMaxText.text = "BombMax = " + BombMax.ToString();
+        BombRemain = PlayerStatus[(int)PowerUpItem.Bomb] - GameObject.FindGameObjectsWithTag("Bomb").Length;
         BombRemainText.text = "BombRemain = " + BombRemain.ToString();
 
+        if (Input.GetMouseButtonDown(0))
+        {
+            DebugPlayerStatus();
+        }
     }
 
-    public void IncreaseFirePower()
+    public void DebugPlayerStatus()
     {
-        this.FirePower++;
+        for (int i = 0; i < PlayerStatus.Length; i++)
+        {
+            Debug.Log(i + " " + (PowerUpItem)i + "=" + PlayerStatus[i]);
+        }
     }
 
-    public void IncreaseBombMax()
+    public void IncreasePlayerStatus(PowerUpItem itemNum)
     {
-        this.BombMax++;
-        this.BombRemain++;
-    }
+        Debug.Log(name + "(IncreasePlayerStatus) itemNum=" + itemNum);
+        Debug.Log(name + "(IncreasePlayerStatus) PlayerStatus[(int)itemNum]=" + PlayerStatus[(int)itemNum] + "(before)");
 
-    public int GetFirePower()
-    {
-        return this.FirePower;
-    }
+        PlayerStatus[(int)itemNum]++;
 
-    public int GetBombMax()
-    {
-        return this.BombMax;
+        Debug.Log(name + "(IncreasePlayerStatus) PlayerStatus[(int)itemNum]=" + PlayerStatus[(int)itemNum] + "(after)");
+
+        for (int i = 0; i < PlayerStatus.Length; i++)
+        {
+            Debug.Log(i + ":" + (PowerUpItem)i + "=" + PlayerStatus[i]);
+        }
     }
 
     private void Move(Direction d) 

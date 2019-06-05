@@ -44,8 +44,7 @@ public class BombController : MonoBehaviour
         Fire = Instantiate(FirePrefab);
         Fire.transform.position = transform.position;
 
-        //int explode = 2;
-        int explode = player.GetFirePower();
+        int explode = player.GetPlayerStatus(PowerUpItem.Fire);
 
         bool[] stop = { false, false, false, false };
 

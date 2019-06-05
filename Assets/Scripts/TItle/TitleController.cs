@@ -22,6 +22,7 @@ public class TitleController : MonoBehaviour
         Platform.text = "";
         Platform.text = Application.platform.ToString();
 
+        GameController.SetStageNum(0);
     }
 
     void LoadLoadScene()

@@ -32,11 +32,12 @@ public class SoftBlockController : MonoBehaviour
     {
         if (other.tag == "Fire")
         {
-            StartCoroutine(Broken());
+            //StartCoroutine(Broken());
+            Broken();
         }
     }
 
-    IEnumerator Broken()
+    void Broken()
     {
         if (isDoor)
         {
@@ -45,7 +46,24 @@ public class SoftBlockController : MonoBehaviour
         }
         else if (isItem)
         {
-            GameObject ItemFire = Instantiate(ItemFirePrefab, transform.position, Quaternion.Euler(10, 180, 0));
+            GameObject Item;
+
+            int ItemNum = controller.GetItemPerStage();
+
+            Debug.Log("stageNum=" + GameController.GetStageNum());
+            Debug.Log("ItemNum=" + ItemNum + ":" + (PowerUpItem)ItemNum);
+
+            switch (ItemNum)
+            {
+                case (int)PowerUpItem.Fire:
+                    Item = Instantiate(ItemFirePrefab, transform.position, Quaternion.Euler(10, 180, 0));
+                    break;
+                case (int)PowerUpItem.Bomb:
+                    Item = Instantiate(ItemBombPrefab, transform.position, Quaternion.Euler(10, 180, 0));
+                    break;
+                default:
+                    break;
+            }
             controller.SetObj(transform.position, BMObj.Item);
         }
         else
@@ -53,6 +71,6 @@ public class SoftBlockController : MonoBehaviour
             controller.SetObj(transform.position, BMObj.Empty);
         }
         Destroy(gameObject);
-        yield return null;
+        //yield return null;
     }
 }

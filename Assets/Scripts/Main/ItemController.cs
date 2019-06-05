@@ -20,14 +20,20 @@ public class ItemController : MonoBehaviour
             switch (tag)
             {
                 case "PowerUp_Fire":
-                    player.IncreaseFirePower();
+                    StartCoroutine(PowerUp(PowerUpItem.Fire));
                     break;
                 case "PowerUp_Bnum":
-                    player.IncreaseBombMax();
+                    StartCoroutine(PowerUp(PowerUpItem.Bomb));
                     break;
             }
-            controller.SetObj(transform.position, BMObj.Empty);
-            Destroy(gameObject);
         }
+    }
+
+    IEnumerator PowerUp(PowerUpItem item)
+    {
+        player.IncreasePlayerStatus(item);
+        controller.SetObj(transform.position, BMObj.Empty);
+        Destroy(gameObject);
+        yield return null;
     }
 }

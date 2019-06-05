@@ -402,6 +402,7 @@ MonoBehaviour:
   MousePosition: {fileID: 774631800}
   stage: {fileID: 1177462911}
   player: {fileID: 821292134}
+  StageClearSE: {fileID: 8300000, guid: ad5ad319d26084642be2ed039ec50776, type: 3}
 --- !u!4 &694150009
 Transform:
   m_ObjectHideFlags: 0
