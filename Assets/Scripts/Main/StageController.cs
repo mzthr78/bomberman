@@ -6,6 +6,9 @@ public class StageController : MonoBehaviour
 {
     public GameObject GameController;
 
+    public Transform HardBlockParent;
+    public Transform SoftBlockParent;
+
     public GameObject HardBlockPrefab;
     public GameObject SoftBlockPrefab;
 
@@ -34,8 +37,10 @@ public class StageController : MonoBehaviour
         posZ = ((transform.localScale.z * 10 - 1) / 2);
         for (int i = 0; i < width; i++)
         {
-            GameObject HardBlock = Instantiate(HardBlockPrefab);
-            HardBlock.transform.position = new Vector3(posX + i, posY, posZ);
+            Vector3 pos = new Vector3(posX + i, posY, posZ);
+            //GameObject HardBlock = Instantiate(HardBlockPrefab, pos, Quaternion.identity, HardBlockParent);
+            GameObject HardBlock = Instantiate(HardBlockPrefab, pos, Quaternion.identity);
+            HardBlock.transform.parent = HardBlockParent;
         }
 
         // 1 .. n - 1 line
@@ -45,11 +50,15 @@ public class StageController : MonoBehaviour
             {
                 GameObject HardBlock;
 
-                HardBlock = Instantiate(HardBlockPrefab);
-                HardBlock.transform.position = new Vector3(posX + 0, posY, posZ - i);
+                Vector3 pos;
 
-                HardBlock = Instantiate(HardBlockPrefab);
-                HardBlock.transform.position = new Vector3(posX + width - 1, posY, posZ - i);
+                pos = new Vector3(posX + 0, posY, posZ - i);
+                HardBlock = Instantiate(HardBlockPrefab, pos, Quaternion.identity);
+                HardBlock.transform.parent = HardBlockParent;
+
+                pos = new Vector3(posX + width - 1, posY, posZ - i);
+                HardBlock = Instantiate(HardBlockPrefab, pos, Quaternion.identity);
+                HardBlock.transform.parent = HardBlockParent;
             }
             else
             {
@@ -57,8 +66,9 @@ public class StageController : MonoBehaviour
                 {
                     if (j % 2 == 0)
                     {
-                        GameObject HardBlock = Instantiate(HardBlockPrefab);
-                        HardBlock.transform.position = new Vector3(posX + j, posY, posZ - i);
+                        Vector3 pos = new Vector3(posX + j, posY, posZ - i);
+                        GameObject HardBlock = Instantiate(HardBlockPrefab, pos, Quaternion.identity);
+                        HardBlock.transform.parent = HardBlockParent;
                     }
                 }
             }
@@ -68,8 +78,9 @@ public class StageController : MonoBehaviour
         posZ = ((transform.localScale.z * 10 - 1) / 2) * -1;
         for (int i = 0; i < width; i++)
         {
-            GameObject HardBlock = Instantiate(HardBlockPrefab);
-            HardBlock.transform.position = new Vector3(posX + i, posY, posZ);
+            Vector3 pos = new Vector3(posX + i, posY, posZ);
+            GameObject HardBlock = Instantiate(HardBlockPrefab, pos, Quaternion.identity);
+            HardBlock.transform.parent = HardBlockParent;
         }
 
         List<List<BMObj>> map = controller.GetMap();
@@ -89,14 +100,17 @@ public class StageController : MonoBehaviour
                 {
                     case BMObj.SoftBlock:
                         SoftBlock = Instantiate(SoftBlockPrefab, pos, Quaternion.identity);
+                        SoftBlock.transform.parent = SoftBlockParent;
                         break;
                     case BMObj.Door:
                         SoftBlock = Instantiate(SoftBlockPrefab, pos, Quaternion.identity);
                         SoftBlock.GetComponent<SoftBlockController>().SetIsDoor();
+                        SoftBlock.transform.parent = SoftBlockParent;
                         break;
                     case BMObj.Item:
                         SoftBlock = Instantiate(SoftBlockPrefab, pos, Quaternion.identity);
                         SoftBlock.GetComponent<SoftBlockController>().SetIsItem();
+                        SoftBlock.transform.parent = SoftBlockParent;
                         break;
                     default:
                         break;

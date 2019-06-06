@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-enum ViewPoint
+public enum ViewPoint
 {
     Right = 0,　// 真上
     Diagonally = 1, // 斜め上
@@ -13,14 +13,16 @@ public class CameraController : MonoBehaviour
 {
     public Transform target;
     Vector3 offset;
-    ViewPoint viewPoint = ViewPoint.Right;
     float posY;
     float posZ;
+
+    ViewPoint vp;
 
     // Start is called before the first frame update
     void Start()
     {
-        InitCameraPosition();
+        vp = GameController.GetViewPoint();
+        InitCameraPosition(vp);
     }
 
     // Update is called once per frame
@@ -28,13 +30,13 @@ public class CameraController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.V))
         {
-            viewPoint++;
-            if (viewPoint == ViewPoint.Dummy) viewPoint = 0;
-            InitCameraPosition(viewPoint);
+            vp++;
+            if (vp == ViewPoint.Dummy) vp = 0;
+            InitCameraPosition(vp);
         }
 
         Vector3 tmp = target.position + offset;
-        if (viewPoint == ViewPoint.Diagonally)
+        if (vp == ViewPoint.Diagonally)
         {
             transform.position = tmp;
         }
@@ -44,9 +46,14 @@ public class CameraController : MonoBehaviour
         }
     }
 
-    void InitCameraPosition(ViewPoint vp = ViewPoint.Right)
+    public ViewPoint GetViewPoint()
     {
-        switch (vp)
+        return this.vp;
+    }
+
+    void InitCameraPosition(ViewPoint v = ViewPoint.Right)
+    {
+        switch (v)
         {
             case ViewPoint.Diagonally:
                 offset = new Vector3(0, 5.5f, -6f) - new Vector3(0, 0, 0);

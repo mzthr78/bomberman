@@ -14,8 +14,8 @@ GameObject:
   - component: {fileID: 5258463571421970190}
   - component: {fileID: 5258463571421970191}
   m_Layer: 0
-  m_Name: powerup_bnum
-  m_TagString: PowerUp_Bnum
+  m_Name: ItemBombPrefab
+  m_TagString: Item_Bomb
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

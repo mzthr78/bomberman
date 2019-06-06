@@ -8,10 +8,11 @@ TagManager:
   - Bomb
   - Enemy
   - Item
-  - PowerUp_Fire
-  - PowerUp_Bnum
   - SoftBlock
   - HardBlock
+  - Door
+  - Item_Fire
+  - Item_Bomb
   layers:
   - Default
   - TransparentFX

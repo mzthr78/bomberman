@@ -33,18 +33,23 @@ public enum PowerUpItem
 
 public class GameController : MonoBehaviour
 {
-    public Text MousePosition;
     public GameObject stage;
+    public GameObject mainCamera;
     public GameObject player;
     PlayerController pcon;
+
+    public Text MousePosition;
+    public Text DebugInfoText;
 
     public AudioClip StageClearSE;
 
     static int stageNum = 0;
+    static int[] PlayerStatusNumArr = new int[9] { 0, 1, 1, 0, 0, 0, 0, 0, 0 };
+    static ViewPoint viewPoint;
+
     int maxStage = 50;
 
     string ItemString = "012342213562235162523532358123762385731683653865378";
-    public static int[] PlayerStatusNumArr = new int[9] { 0, 1, 1, 0, 0, 0, 0, 0, 0 };
 
     List<List<BMObj>> map = new List<List<BMObj>>();
 
@@ -57,6 +62,7 @@ public class GameController : MonoBehaviour
     {
         stageNum = 0;
         PlayerInit();
+        viewPoint = ViewPoint.Right;
     }
 
     public static void PlayerInit()
@@ -67,6 +73,11 @@ public class GameController : MonoBehaviour
     public static void SetStageNum(int num)
     {
         stageNum = num;
+    }
+
+    public static ViewPoint GetViewPoint()
+    {
+        return viewPoint;
     }
 
     public static int NextStageNum()
@@ -140,6 +151,17 @@ public class GameController : MonoBehaviour
         {
             SceneManager.LoadScene("GameOverScene");
         }
+
+        DebugInfo();
+    }
+
+    public void DebugInfo()
+    {
+        string tmp = "";
+
+        tmp += "ViewPoint = " + viewPoint + "\n";
+
+        DebugInfoText.text = tmp;
     }
 
     public BMObj GetObj(Vector3 pos)
@@ -241,16 +263,6 @@ public class GameController : MonoBehaviour
                 }
                 tmpLine.Add(tmpCol);
 
-                char c = ' ';
-                switch (tmpCol)
-                {
-                    case BMObj.HardBlock:
-                        c = '#';
-                        break;
-                    case BMObj.SoftBlock:
-                        c = '%';
-                        break;
-                }
             }
             map.Add(tmpLine);
         }
@@ -261,7 +273,7 @@ public class GameController : MonoBehaviour
         return this.map;
     }
 
-    public void StageClear()
+    void SaveGlovbalSettings()
     {
         int[] playerStatus = player.GetComponent<PlayerController>().GetPlayerStatus();
 
@@ -270,6 +282,12 @@ public class GameController : MonoBehaviour
             PlayerStatusNumArr[i] = playerStatus[i];
         }
 
+        viewPoint = mainCamera.GetComponent<CameraController>().GetViewPoint();
+    }
+
+    public void StageClear()
+    {
+        SaveGlovbalSettings();
         StartCoroutine(StageClearProc());
     }
 

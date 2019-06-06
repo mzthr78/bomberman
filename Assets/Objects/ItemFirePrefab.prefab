@@ -14,8 +14,8 @@ GameObject:
   - component: {fileID: 3331271649660312446}
   - component: {fileID: 3331271649660312441}
   m_Layer: 0
-  m_Name: powerup_fire
-  m_TagString: PowerUp_Fire
+  m_Name: ItemFirePrefab
+  m_TagString: Item_Fire
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

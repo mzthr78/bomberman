@@ -19,10 +19,10 @@ public class ItemController : MonoBehaviour
         {
             switch (tag)
             {
-                case "PowerUp_Fire":
+                case "Item_Fire":
                     StartCoroutine(PowerUp(PowerUpItem.Fire));
                     break;
-                case "PowerUp_Bnum":
+                case "Item_Bomb":
                     StartCoroutine(PowerUp(PowerUpItem.Bomb));
                     break;
             }
