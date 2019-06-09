@@ -1,12 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum ViewPoint
 {
     Right = 0,　// 真上
     Diagonally = 1, // 斜め上
-    Dummy = 2,
+    TPP = 2,
+    FPP = 3,
 }
 
 public class CameraController : MonoBehaviour
@@ -15,6 +17,8 @@ public class CameraController : MonoBehaviour
     Vector3 offset;
     float posY;
     float posZ;
+
+    public Text debugtext;
 
     ViewPoint vp;
 
@@ -30,19 +34,23 @@ public class CameraController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.V))
         {
-            vp++;
-            if (vp == ViewPoint.Dummy) vp = 0;
+            int vptmp = (int)vp + 1;
+            if (vptmp > System.Enum.GetValues(typeof(ViewPoint)).Length - 1) vptmp = 0;
+            vp = (ViewPoint)vptmp;
             InitCameraPosition(vp);
+
+            debugtext.text = vp.ToString();
         }
 
         Vector3 tmp = target.position + offset;
-        if (vp == ViewPoint.Diagonally)
-        {
-            transform.position = tmp;
-        }
-        else
-        {
-            transform.position = new Vector3(tmp.x, tmp.y, posZ); // Diagonally
+
+        switch (vp) {
+            case ViewPoint.Right:
+                transform.position = new Vector3(tmp.x, tmp.y, posZ); // Diagonally
+                break;
+            default:
+                transform.position = tmp;
+                break;
         }
     }
 
@@ -56,6 +64,14 @@ public class CameraController : MonoBehaviour
         switch (v)
         {
             case ViewPoint.Diagonally:
+                offset = new Vector3(0, 5.5f, -6f) - new Vector3(0, 0, 0);
+                transform.rotation = Quaternion.Euler(50, 0, 0);
+                break;
+            case ViewPoint.TPP:
+                offset = new Vector3(0, 3f, 3f) - new Vector3(0, 0, 0);
+                transform.rotation = Quaternion.Euler(45, 180, 0);
+                break;
+            case ViewPoint.FPP:
                 offset = new Vector3(0, 5.5f, -6f) - new Vector3(0, 0, 0);
                 transform.rotation = Quaternion.Euler(50, 0, 0);
                 break;

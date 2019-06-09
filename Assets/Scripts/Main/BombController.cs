@@ -8,6 +8,7 @@ public class BombController : MonoBehaviour
     PlayerController player;
 
     public GameObject FirePrefab;
+    public AudioClip ExplosionSE;
 
     float delta = 0;
     float span = 4f;
