@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
 {
     GameController controller;
     public GameObject bomberman;
+    public GameObject mainCamera;
 
     public Text FirePowerText;
     public Text BombMaxText;
@@ -135,28 +136,36 @@ public class PlayerController : MonoBehaviour
         switch (d)
         {
             case Direction.Right:
-                bomberman.transform.rotation = Quaternion.Euler(0, 90, 0);
-                pos = new Vector3(1, 0, 0);
+                gameObject.transform.rotation = Quaternion.Euler(0, 90, 0);
+                //pos = new Vector3(1, 0, 0);
                 break;
             case Direction.Down:
-                bomberman.transform.rotation = Quaternion.Euler(0, 180, 0);
-                pos = new Vector3(0, 0, -1);
+                gameObject.transform.rotation = Quaternion.Euler(0, 180, 0);
+                //pos = new Vector3(0, 0, -1);
                 break;
             case Direction.Left:
-                bomberman.transform.rotation = Quaternion.Euler(0, 270, 0);
-                pos = new Vector3(-1, 0, 0);
+                gameObject.transform.rotation = Quaternion.Euler(0, 270, 0);
+                //pos = new Vector3(-1, 0, 0);
                 break;
             case Direction.Up:
-                bomberman.transform.rotation = Quaternion.Euler(0, 0, 0);
-                pos = new Vector3(0, 0, 1);
+                gameObject.transform.rotation = Quaternion.Euler(0, 0, 0);
+                //pos = new Vector3(0, 0, 1);
                 break;
             default:
                 break;
         }
 
+        Ray ray = new Ray(transform.position, transform.forward);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, 0.65f)) {
+            Debug.Log("ray hit = " + hit.transform.tag);
+        }
+
+        /*
         RaycastHit hit;
         if (Physics.Linecast(transform.position, transform.position + pos * 0.45f, out hit))
         {
+            Debug.Log("linecasthit " + transform.transform.tag);
             switch (hit.transform.tag)
             {
                 case "HardBlock":
@@ -166,8 +175,10 @@ public class PlayerController : MonoBehaviour
                     break;
             }
         }
+        */
 
-        transform.Translate(pos.x * speed, pos.y * speed, pos.z * speed);
+        transform.position += transform.forward * speed;
+        //transform.Translate(pos.x * speed, pos.y * speed, pos.z * speed);
     }
 }
 

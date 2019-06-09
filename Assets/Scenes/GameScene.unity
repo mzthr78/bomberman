@@ -692,6 +692,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bomberman: {fileID: 1817494639}
+  mainCamera: {fileID: 963194225}
   FirePowerText: {fileID: 2139193682}
   BombMaxText: {fileID: 505619009}
   BombRemainText: {fileID: 1733293048}
