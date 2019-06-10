@@ -22,6 +22,8 @@ public class PlayerController : MonoBehaviour
     public Text BombMaxText;
     public Text BombRemainText;
 
+    Animator animator;
+
     float speed = 0.04f;
 
     Direction dir = Direction.None;
@@ -60,6 +62,8 @@ public class PlayerController : MonoBehaviour
         LoadPlayerStatus();
 
         BombRemain = PlayerStatus[(int)PowerUpItem.Bomb];
+
+        animator = bomberman.GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -92,6 +96,10 @@ public class PlayerController : MonoBehaviour
         else if (Input.GetKey(KeyCode.DownArrow))
         {
             Move(Direction.Down);
+        }
+        else
+        {
+            animator.SetBool("IsWalk", false);
         }
 
         FirePowerText.text = "FirePower = " + PlayerStatus[(int)PowerUpItem.Fire].ToString();
@@ -131,7 +139,35 @@ public class PlayerController : MonoBehaviour
 
     private void Move(Direction d) 
     {
+        ViewPoint vp = mainCamera.GetComponent<CameraController>().GetViewPoint();
+
+        switch (vp)
+        {
+            case ViewPoint.TPP:
+            case ViewPoint.FPP:
+                switch (d)
+                {
+                    case Direction.Right:
+                        d = Direction.Left;
+                        break;
+                    case Direction.Left:
+                        d = Direction.Right;
+                        break;
+                    case Direction.Up:
+                        d = Direction.Down;
+                        break;
+                    case Direction.Down:
+                        d = Direction.Up;
+                        break;
+                }
+                break;
+            default:
+                break;
+        }
+
         Vector3 pos = new Vector3(0, 0, 0);
+
+        animator.SetBool("IsWalk", true);
 
         switch (d)
         {
@@ -191,9 +227,11 @@ public class PlayerController : MonoBehaviour
         }
         */
 
+        animator.SetBool("IsWalk", true);
         transform.position += transform.forward * speed;
         //transform.Translate(pos.x * speed, pos.y * speed, pos.z * speed);
     }
+
 }
 
 

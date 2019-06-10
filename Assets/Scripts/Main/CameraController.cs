@@ -48,6 +48,10 @@ public class CameraController : MonoBehaviour
             case ViewPoint.Right:
                 transform.position = new Vector3(tmp.x, tmp.y, posZ); // Diagonally
                 break;
+            case ViewPoint.TPP:
+                transform.position = tmp; // Diagonally
+                transform.LookAt(target);
+                break;
             default:
                 transform.position = tmp;
                 break;
@@ -69,7 +73,7 @@ public class CameraController : MonoBehaviour
                 break;
             case ViewPoint.TPP:
                 offset = new Vector3(0, 3f, 3f) - new Vector3(0, 0, 0);
-                transform.rotation = Quaternion.Euler(45, 180, 0);
+                //transform.rotation = Quaternion.Euler(45, 180, 0);
                 break;
             case ViewPoint.FPP:
                 offset = new Vector3(0, 5.5f, -6f) - new Vector3(0, 0, 0);
