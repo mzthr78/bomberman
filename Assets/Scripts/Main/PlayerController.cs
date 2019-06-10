@@ -157,9 +157,23 @@ public class PlayerController : MonoBehaviour
 
         Ray ray = new Ray(transform.position, transform.forward);
         RaycastHit hit;
+
+        if (Physics.BoxCast(transform.position, Vector3.one * 0.2f, transform.forward, out hit, Quaternion.identity, 0.25f))
+        {
+            Debug.DrawRay(ray.origin, ray.direction, Color.red);
+            Debug.Log("ray hit = " + hit.transform.tag);
+            return;
+        }
+
+        /*
+        Ray ray = new Ray(transform.position, transform.forward);
+        RaycastHit hit;
+
         if (Physics.Raycast(ray, out hit, 0.65f)) {
+            Debug.DrawRay(ray.origin, ray.direction, Color.red);
             Debug.Log("ray hit = " + hit.transform.tag);
         }
+        */
 
         /*
         RaycastHit hit;
