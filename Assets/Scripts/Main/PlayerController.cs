@@ -196,9 +196,16 @@ public class PlayerController : MonoBehaviour
 
         if (Physics.BoxCast(transform.position, Vector3.one * 0.2f, transform.forward, out hit, Quaternion.identity, 0.25f))
         {
-            Debug.DrawRay(ray.origin, ray.direction, Color.red);
-            Debug.Log("ray hit = " + hit.transform.tag);
-            return;
+            //Debug.DrawRay(ray.origin, ray.direction, Color.red);
+            //Debug.Log("ray hit = " + hit.transform.tag);
+            switch (hit.transform.tag)
+            {
+                case "HardBlock":
+                case "SoftBlock":
+                    return;
+                default:
+                    break;
+            }
         }
 
         /*

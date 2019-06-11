@@ -9,6 +9,8 @@ public class SoftBlockController : MonoBehaviour
     public GameObject DoorPrefab;
     public GameObject ItemFirePrefab;
     public GameObject ItemBombPrefab;
+    public GameObject ItemSpeedPrefab;
+    public GameObject ItemRemotePrefab;
 
     bool isItem = false;
     bool isDoor = false;
@@ -55,22 +57,25 @@ public class SoftBlockController : MonoBehaviour
         {
             int ItemNum = controller.GetItemPerStage();
 
-            switch (ItemNum)
+            if (GameObject.FindGameObjectsWithTag("Item").Length == 0)
             {
-                case (int)PowerUpItem.Fire:
-                    if (GameObject.FindGameObjectsWithTag("Item_Fire").Length == 0)
-                    {
+                switch (ItemNum)
+                {
+                    case (int)PowerUpItem.Fire:
                         GameObject fire = Instantiate(ItemFirePrefab, transform.position, Quaternion.Euler(10, 180, 0));
-                    }
-                    break;
-                case (int)PowerUpItem.Bomb:
-                    if (GameObject.FindGameObjectsWithTag("Item_Bomb").Length == 0)
-                    {
+                        break;
+                    case (int)PowerUpItem.Bomb:
                         GameObject bomb = Instantiate(ItemBombPrefab, transform.position, Quaternion.Euler(10, 180, 0));
-                    }
-                    break;
-                default:
-                    break;
+                        break;
+                    case (int)PowerUpItem.Speed:
+                        GameObject speed = Instantiate(ItemSpeedPrefab, transform.position, Quaternion.Euler(10, 180, 0));
+                        break;
+                    case (int)PowerUpItem.Remote:
+                        GameObject remote = Instantiate(ItemRemotePrefab, transform.position, Quaternion.Euler(10, 180, 0));
+                        break;
+                    default:
+                        break;
+                }
             }
             controller.SetObj(transform.position, BMObj.Item);
         }

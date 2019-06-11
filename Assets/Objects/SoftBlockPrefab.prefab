@@ -110,3 +110,7 @@ MonoBehaviour:
     type: 3}
   ItemBombPrefab: {fileID: 4312264639094411793, guid: 8bc1da4c60e8442e3a4bc15ed4186a27,
     type: 3}
+  ItemSpeedPrefab: {fileID: 8372348887140966258, guid: 4a7a070308c684471bf0da124e011c51,
+    type: 3}
+  ItemRemotePrefab: {fileID: 556560870414948134, guid: 58738a33392ae42e18b5d9162723fc5e,
+    type: 3}

@@ -17,6 +17,8 @@ public class ItemController : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
+            StartCoroutine(PowerUp((PowerUpItem)controller.GetItemPerStage()));
+            /*
             switch (tag)
             {
                 case "Item_Fire":
@@ -26,6 +28,7 @@ public class ItemController : MonoBehaviour
                     StartCoroutine(PowerUp(PowerUpItem.Bomb));
                     break;
             }
+            */
         }
     }
 
