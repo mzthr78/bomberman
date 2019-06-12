@@ -49,7 +49,7 @@ public class GameController : MonoBehaviour
 
     int maxStage = 50;
 
-    string ItemString = "012342213562235162523532358123762385731683653865378";
+    string ItemString = "012342213562235162523532358123762385731683653865378";　// Items of Stage[0 .. 50]
 
     List<List<BMObj>> map = new List<List<BMObj>>();
 
@@ -194,7 +194,7 @@ public class GameController : MonoBehaviour
         // hardblock = 14 * 5 = 70
         // walkable = 319 - 70 = 249
 
-        int SoftBlockCount = 2 + (stageNum - 1);
+        int SoftBlockCount = 0 + (stageNum - 1);
 
         // Empty
         List<BMObj> tmp = Enumerable.Repeat(BMObj.None, 246 - (SoftBlockCount)).ToList();

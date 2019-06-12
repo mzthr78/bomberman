@@ -4,12 +4,11 @@ using UnityEngine;
 
 public class DebugPanelController : MonoBehaviour
 {
-    public GameObject text;
+    //GameObject chidText;
 
     // Start is called before the first frame update
     void Start()
     {
-        SetText("abc");
     }
 
     // Update is called once per frame
@@ -20,6 +19,6 @@ public class DebugPanelController : MonoBehaviour
 
     public void SetText(string s)
     {
-        text.GetComponent<TextMesh>().text = s;
+        transform.GetChild(0).GetComponent<TextMesh>().text = s;
     }
 }

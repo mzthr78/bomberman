@@ -11,10 +11,7 @@ TagManager:
   - SoftBlock
   - HardBlock
   - Door
-  - Item_Fire
-  - Item_Bomb
-  - Item_Speed
-  - Item_Remote
+  - Debug
   layers:
   - Default
   - TransparentFX
