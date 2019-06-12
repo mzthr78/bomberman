@@ -167,6 +167,11 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+    void BFS()
+    {
+
+    }
+
     bool IsObstruct(BMObj bo)
     {
         switch (bo)
