@@ -3,15 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-enum Direction
-{
-    None = -1,
-    Right = 0,
-    Down = 1,
-    Left = 2,
-    Up = 3,
-}
-
 public class PlayerController : MonoBehaviour
 {
     GameController controller;
@@ -79,6 +70,9 @@ public class PlayerController : MonoBehaviour
                 controller.SetObj(pos, BMObj.Bomb);
 
                 this.BombRemain--;
+            } else
+            {
+                //Debug.Log("obj = " + controller.GetObj(pos));
             }
         }
         else if (Input.GetKey(KeyCode.RightArrow))
@@ -108,10 +102,6 @@ public class PlayerController : MonoBehaviour
         BombRemain = PlayerStatus[(int)PowerUpItem.Bomb] - GameObject.FindGameObjectsWithTag("Bomb").Length;
         BombRemainText.text = "BombRemain = " + BombRemain.ToString();
 
-        if (Input.GetMouseButtonDown(0))
-        {
-            DebugPlayerStatus();
-        }
     }
 
     public void DebugPlayerStatus()

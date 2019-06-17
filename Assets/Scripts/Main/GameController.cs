@@ -31,6 +31,18 @@ public enum PowerUpItem
     Immortality = 8, // パーフェクトマン
 }
 
+public struct Addr
+{
+    public int x;
+    public int z;
+
+    public Addr(int px, int pz)
+    {
+        x = px;
+        z = pz;
+    }
+}
+
 public class GameController : MonoBehaviour
 {
     public GameObject stage;
@@ -194,7 +206,7 @@ public class GameController : MonoBehaviour
         // hardblock = 14 * 5 = 70
         // walkable = 319 - 70 = 249
 
-        int SoftBlockCount = 0 + (stageNum - 1);
+        int SoftBlockCount = 50 + (stageNum - 1);
 
         // Empty
         List<BMObj> tmp = Enumerable.Repeat(BMObj.None, 246 - (SoftBlockCount)).ToList();

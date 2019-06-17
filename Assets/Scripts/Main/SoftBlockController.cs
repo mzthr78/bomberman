@@ -43,7 +43,7 @@ public class SoftBlockController : MonoBehaviour
 
     void Broken()
     {
-        Debug.Log(name + "(Broken)" + broken++);
+        //Debug.Log(name + "(Broken)" + broken++);
 
         if (isDoor)
         {
@@ -82,6 +82,7 @@ public class SoftBlockController : MonoBehaviour
         else
         {
             controller.SetObj(transform.position, BMObj.Empty);
+            //Debug.Log("aaa");
         }
         Destroy(gameObject);
         //yield return null;
