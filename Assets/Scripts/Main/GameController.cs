@@ -61,7 +61,7 @@ public class GameController : MonoBehaviour
 
     int maxStage = 50;
 
-    string ItemString = "012342213562235162523532358123762385731683653865378";　// Items of Stage[0 .. 50]
+    string ItemString = "012342213562235162523532358123762385731683653865378";　// Item(s) of Stage[0 .. 50]
 
     List<List<BMObj>> map = new List<List<BMObj>>();
 

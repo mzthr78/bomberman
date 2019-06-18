@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviour
 
     Animator animator;
 
+    bool freeze = false;
+
     float speed = 0.04f;
 
     Direction dir = Direction.None;
@@ -48,6 +50,16 @@ public class PlayerController : MonoBehaviour
         controller = GameObject.Find("GameController").GetComponent<GameController>();
     }
 
+    public void Freeze(bool b = true)
+    {
+        this.freeze = b;
+    }
+
+    public void UnFreeze()
+    {
+        Freeze(false);
+    }
+
     private void Start()
     {
         LoadPlayerStatus();
@@ -60,6 +72,8 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (this.freeze) return;
+
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Vector3 pos = new Vector3(Mathf.Round(transform.position.x), transform.position.y, Mathf.Round(transform.position.z));

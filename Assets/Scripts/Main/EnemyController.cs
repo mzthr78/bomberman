@@ -35,6 +35,16 @@ public class EnemyController : MonoBehaviour
 
     Queue<Addr> queTarget;
 
+    public void Freeze(bool b = true)
+    {
+        this.freeze = b;
+    }
+
+    public void UnFreeze()
+    {
+        Freeze(false);
+    }
+
     private void Start()
     {
         posY = transform.position.y;
@@ -46,13 +56,6 @@ public class EnemyController : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            freeze = !freeze;
-
-            RouteSearch();
-        }
-
         if (freeze) return;
 
         float distance = Vector3.Distance(transform.position, targetPos);
