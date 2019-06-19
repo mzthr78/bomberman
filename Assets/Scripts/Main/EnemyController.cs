@@ -56,6 +56,11 @@ public class EnemyController : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetMouseButtonDown(0))
+        {
+            freeze = !freeze;
+        }
+
         if (freeze) return;
 
         float distance = Vector3.Distance(transform.position, targetPos);
@@ -121,6 +126,15 @@ public class EnemyController : MonoBehaviour
                 break;
             default:
                 break;
+        }
+
+        RaycastHit hit;
+        //if (Physics.Raycast(transform.position, transform.forward, out hit, 28)) {
+        if (Physics.Raycast(transform.position, transform.forward, out hit, 1)) {
+            if (IsObstruct(hit.transform.tag))
+            {
+                Debug.Log("enemy hit " + hit.transform.tag);
+            }
         }
 
         //transform.Translate(transform.forward * 0.01f); // これだとダメ
@@ -260,6 +274,20 @@ public class EnemyController : MonoBehaviour
         {
             case BMObj.HardBlock:
             case BMObj.SoftBlock:
+            case BMObj.Bomb:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    bool IsObstruct(string t)
+    {
+        switch (t)
+        {
+            case "HardBlock":
+            case "SoftBlock":
+            case "Bomb":
                 return true;
             default:
                 return false;

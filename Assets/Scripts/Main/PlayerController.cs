@@ -195,7 +195,7 @@ public class PlayerController : MonoBehaviour
                 break;
         }
 
-        Ray ray = new Ray(transform.position, transform.forward);
+        //Ray ray = new Ray(transform.position, transform.forward);
         RaycastHit hit;
 
         if (Physics.BoxCast(transform.position, Vector3.one * 0.2f, transform.forward, out hit, Quaternion.identity, 0.25f))
