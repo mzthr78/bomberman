@@ -59,6 +59,9 @@ public class GameController : MonoBehaviour
     static int[] PlayerStatusNumArr = new int[9] { 0, 1, 1, 0, 0, 0, 0, 0, 0 };
     static ViewPoint viewPoint;
 
+    private int stageWidth = 0;
+    private int stageHeight = 0;
+
     int maxStage = 50;
 
     string ItemString = "012342213562235162523532358123762385731683653865378";　// Item(s) of Stage[0 .. 50]
@@ -124,6 +127,16 @@ public class GameController : MonoBehaviour
 
     AudioSource aud;
 
+    public int GetStageWidth()
+    {
+        return this.stageWidth;
+    }
+
+    public int GetStageHeight()
+    {
+        return this.stageHeight;
+    }
+
     private void Awake()
     {
         if (stageNum == 0) stageNum = 1;
@@ -143,6 +156,9 @@ public class GameController : MonoBehaviour
         InitBObjects();
 
         aud.Play();
+
+        stageWidth = stage.GetComponent<StageController>().GetWidth();
+        stageHeight = stage.GetComponent<StageController>().GetHeight();
     }
 
     // Update is called once per frame
@@ -209,7 +225,7 @@ public class GameController : MonoBehaviour
         int SoftBlockCount = 50 + (stageNum - 1);
 
         // Empty
-        List<BMObj> tmp = Enumerable.Repeat(BMObj.None, 246 - (SoftBlockCount)).ToList();
+        List<BMObj> tmp = Enumerable.Repeat(BMObj.Empty, 246 - (SoftBlockCount)).ToList();
 
         // SoftBlock
         tmp.AddRange(Enumerable.Repeat(BMObj.SoftBlock, SoftBlockCount).ToList());

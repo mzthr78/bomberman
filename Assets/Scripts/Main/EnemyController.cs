@@ -11,14 +11,25 @@ public enum Direction
     Up = 3,
 }
 
+enum EnemyAction
+{
+    Idle,
+    Robe,
+    Wander,
+}
+
 public class EnemyController : MonoBehaviour
 {
     public GameObject GameController;
     GameController controller;
 
     public Transform player;
+    public GameObject targetObj;
 
     public GameObject debugPanelPrefab;
+
+    int stageWidth = 0;
+    int stageHeight = 0;
 
     private void Awake()
     {
@@ -26,7 +37,7 @@ public class EnemyController : MonoBehaviour
     }
 
     Vector3 startPos;
-    Vector3 targetPos;
+    Vector3 markerPos;
 
     float posY = 0;
 
@@ -48,10 +59,14 @@ public class EnemyController : MonoBehaviour
     private void Start()
     {
         posY = transform.position.y;
-        targetPos = transform.position;
+        markerPos = transform.position;
 
         queTarget = new Queue<Addr>();
 
+        stageWidth = controller.GetStageWidth();
+        stageHeight = controller.GetStageHeight();
+
+        freeze = false;
     }
 
     void Update()
@@ -59,36 +74,42 @@ public class EnemyController : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             freeze = !freeze;
+            Wander();
         }
 
         if (freeze) return;
 
-        float distance = Vector3.Distance(transform.position, targetPos);
+        float distance = Vector3.Distance(transform.position, markerPos);
 
         if (distance < 0.05)
         {
             if (queTarget.Count > 0)
             {
                 Addr tmp = queTarget.Dequeue();
-                targetPos = new Vector3(tmp.x - 15, posY, 6 - tmp.z);
-                //Debug.Log("target = " + targetPos);
+
+                // ここでオブジェクトチェック
+
+                markerPos = new Vector3(tmp.x - 15, posY, 6 - tmp.z);
             } else
             {
-                RouteSearch();
+                Wander();
 
                 Addr tmp = queTarget.Dequeue();
-                targetPos = new Vector3(tmp.x - 15, posY, 6 - tmp.z);
+                markerPos = new Vector3(tmp.x - 15, posY, 6 - tmp.z);
+
             }
         }
-
-        Toward(targetPos);
+        else
+        {
+            Toward(markerPos);
+        }
     }
 
-    void Toward(Vector3 target)
+    void Toward(Vector3 pos)
     {
         Direction d = Direction.None;
 
-        Vector3 sub = transform.position - target;
+        Vector3 sub = transform.position - pos;
         //Debug.Log("sub="+sub);
 
         if (Mathf.Abs(sub.x) > 0.1f)
@@ -107,9 +128,8 @@ public class EnemyController : MonoBehaviour
         Move(d);
     }
 
-    void Move(Direction d)
+    void ChangeDirection(Direction d)
     {
-
         switch (d)
         {
             case Direction.Right:
@@ -127,6 +147,11 @@ public class EnemyController : MonoBehaviour
             default:
                 break;
         }
+    }
+
+    void Move(Direction d)
+    {
+        ChangeDirection(d);
 
         RaycastHit hit;
         //if (Physics.Raycast(transform.position, transform.forward, out hit, 28)) {
@@ -134,27 +159,97 @@ public class EnemyController : MonoBehaviour
             if (IsObstruct(hit.transform.tag))
             {
                 Debug.Log("enemy hit " + hit.transform.tag);
+
+                queTarget.Clear();
+
+                //return;
             }
         }
 
-        //transform.Translate(transform.forward * 0.01f); // これだとダメ
         transform.position += transform.forward * speed;
+
+        //transform.Translate(transform.forward * 0.01f); // これだとダメ
     }
 
-    void RouteSearch()
+    // キョロキョロ
+    void Robe()
+    {
+
+    }
+
+    Direction preDir = Direction.None;
+
+    // ウロウロ
+    private void Wander()
+    {
+        Direction[] SearchDir = { Direction.Left, Direction.Right, Direction.Up, Direction.Down };
+
+        int[] dx = { -1, 1, 0, 0 };
+        int[] dz = { 0, 0, 1, -1 };
+
+
+        Vector3 tmpPos = new Vector3(0, 0, 0);
+
+        bool find = false;
+
+        for (int i = 0; i < 4; i++)
+        {
+            ChangeDirection(SearchDir[i]);
+
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, transform.forward, out hit, 28))
+            {
+                switch (hit.transform.tag)
+                {
+                    case "HardBlock":
+                    case "SoftBlock":
+                        if (Vector3.Distance(transform.position, hit.transform.position) > 1.05f)
+                        {
+                            tmpPos = hit.transform.position - new Vector3(dx[i], 0, dz[i]);
+                            find = true;
+                        }
+                        break;
+                    case "Player":
+                        if (Vector3.Distance(transform.position, hit.transform.position) > 1.05f)
+                        {
+                            tmpPos = hit.transform.position;
+                            find = true;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            targetObj.transform.position = tmpPos;
+
+            Debug.Log("dir=" + SearchDir[i] + " find? " + find);
+            Debug.Log("pos=" + transform.position + " hit(" + hit.transform.tag + ")=" + hit.transform.position);
+            Debug.Log("distance=" + Vector3.Distance(transform.position, hit.transform.position));
+
+            if (find) break;
+        }
+
+        SearchShortestPath(targetObj.transform.position);
+    }
+
+    void SearchShortestPath(Vector3 targetPos)
     {
         queTarget.Clear();
 
         float rx;
         float rz;
 
-        rx = Mathf.Round(player.position.x);
-        rz = Mathf.Round(player.position.z);
-        Addr target = new Addr((int)rx + 15, 6 - (int)rz);
-
         rx = Mathf.Round(transform.position.x);
         rz = Mathf.Round(transform.position.z);
         Addr start = new Addr((int)rx + 15, 6 - (int)rz);
+
+        //rx = Mathf.Round(player.position.x);
+        //rz = Mathf.Round(player.position.z);
+        rx = Mathf.Round(targetPos.x);
+        rz = Mathf.Round(targetPos.z);
+
+        Addr target = new Addr((int)rx + 15, 6 - (int)rz);
 
         BFS(start, target, false);
 
@@ -164,6 +259,7 @@ public class EnemyController : MonoBehaviour
         Addr curr = target;
 
         List<Addr> shortest = new List<Addr>();
+        shortest.Add(curr);
 
         while (!find && counter < 10000)
         {
