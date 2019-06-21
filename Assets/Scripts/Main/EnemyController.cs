@@ -99,7 +99,7 @@ public class EnemyController : MonoBehaviour
                 markerPos = new Vector3(tmp.x - 15, posY, 6 - tmp.z);
             } else
             {
-                Wander();
+                StartCoroutine(Robe());
 
                 Addr tmp = queTarget.Dequeue();
                 markerPos = new Vector3(tmp.x - 15, posY, 6 - tmp.z);
@@ -114,9 +114,11 @@ public class EnemyController : MonoBehaviour
     }
 
     // キョロキョロ
-    void Robe()
+    IEnumerator Robe()
     {
-
+        ChangeDirection(Direction.Down);
+        yield return new WaitForSeconds(0.2f);
+        Wander();
     }
 
     Direction PreDir = Direction.None;
