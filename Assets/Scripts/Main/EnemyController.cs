@@ -71,7 +71,7 @@ public class EnemyController : MonoBehaviour
         Wander();
     }
 
-    private void LateUpdate()
+    private void FixedUpdate()
     {
         if (Input.GetMouseButtonDown(0))
         {
@@ -86,6 +86,12 @@ public class EnemyController : MonoBehaviour
 
         if (distance < 0.05)
         {
+            if (Random.Range(0, 100) < 5)
+            {
+                PreDir = Direction.None;
+                Wander();
+            }
+
             if (queTarget.Count > 0)
             {
                 Addr tmp = queTarget.Dequeue();
@@ -118,7 +124,7 @@ public class EnemyController : MonoBehaviour
     // ウロウロ
     private void Wander()
     {
-        Debug.Log("wander!");
+        Debug.Log("wander! PreDir=" + PreDir);
 
         if (queTarget.Count > 0) queTarget.Clear();
 
@@ -198,12 +204,12 @@ public class EnemyController : MonoBehaviour
 
         Direction SeekDir = Direction.None;
 
-        Vector3 pos;
+        
         BMObj obj;
         for (int i = 0; i < 4; i++)
         {
             //ChangeDirection(SearchDir[idx]);
-            pos = transform.position + new Vector3(dx[i], transform.position.y, dz[i]);
+            Vector3 pos = transform.position + new Vector3(dx[i], transform.position.y, dz[i]);
             obj = controller.GetObj(pos);
 
             //Debug.Log("dir=" + SearchDir[i] + ", pos=" + pos + ", obj=" + tmp);
@@ -214,7 +220,7 @@ public class EnemyController : MonoBehaviour
                     break;
                 default:
                     SeekDir = SearchDir[i];
-                    queTarget.Enqueue(controller.Pos2Addr(pos));
+                    //queTarget.Enqueue(controller.Pos2Addr(pos));
                     PreDir = SeekDir;
                     break;
             }
@@ -232,10 +238,10 @@ public class EnemyController : MonoBehaviour
 
         bool isEmpty = true;
 
-        pos = transform.position + new Vector3(dx[(int)SeekDir], transform.position.y, dz[(int)SeekDir]);
+        Vector3  prePos = transform.position + new Vector3(dx[(int)SeekDir], transform.position.y, dz[(int)SeekDir]);
         while (isEmpty)
         {
-            pos += new Vector3(dx[(int)SeekDir], pos.y, dz[(int)SeekDir]);
+            Vector3 pos = prePos + new Vector3(dx[(int)SeekDir], prePos.y, dz[(int)SeekDir]);
             obj = controller.GetObj(pos);
 
             switch (obj)
@@ -245,17 +251,16 @@ public class EnemyController : MonoBehaviour
                     isEmpty = false;
                     break;
                 default:
-                    queTarget.Enqueue(controller.Pos2Addr(pos));
+                    //queTarget.Enqueue(controller.Pos2Addr(pos));
+                    prePos = pos;
                     break;
             }
         }
-
+        queTarget.Enqueue(controller.Pos2Addr(prePos));
     }
 
     void Toward(Vector3 pos)
     {
-        Debug.Log("(Toward) pos=" + pos);
-
         Direction d = Direction.None;
 
         Vector3 sub = transform.position - pos;
