@@ -55,12 +55,12 @@ public class GameController : MonoBehaviour
 
     public AudioClip StageClearSE;
 
-    static int stageNum = 0;
-    static int[] PlayerStatusNumArr = new int[9] { 0, 1, 1, 0, 0, 0, 0, 0, 0 };
+    static int stageNum;
+    static int[] PlayerStatusNumArr = { 0, 1, 1, 0, 0, 0, 0, 0, 0 };
     static ViewPoint viewPoint;
 
-    private int stageWidth = 0;
-    private int stageHeight = 0;
+    private int stageWidth;
+    private int stageHeight;
 
     int maxStage = 50;
 
@@ -135,6 +135,16 @@ public class GameController : MonoBehaviour
     public int GetStageHeight()
     {
         return this.stageHeight;
+    }
+
+    public Addr Pos2Addr(Vector3 pos)
+    {
+        return new Addr((int)pos.x + 15, 6 - (int)pos.z);
+    }
+
+    public Vector3 Addr2Pos(Addr addr)
+    {
+        return new Vector3(addr.x - 15, 0, 6 - addr.z);
     }
 
     private void Awake()

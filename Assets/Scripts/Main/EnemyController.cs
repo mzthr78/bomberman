@@ -42,7 +42,7 @@ public class EnemyController : MonoBehaviour
     float posY = 0;
 
     bool freeze = false;
-    float speed = 0.035f;
+    float speed = 0.033f;
 
     Queue<Addr> queTarget;
 
@@ -67,27 +67,28 @@ public class EnemyController : MonoBehaviour
         stageHeight = controller.GetStageHeight();
 
         freeze = false;
+
+        Wander();
     }
 
-    void Update()
+    private void LateUpdate()
     {
         if (Input.GetMouseButtonDown(0))
         {
             freeze = !freeze;
-            Wander();
+            //Wander();
         }
 
         if (freeze) return;
 
         float distance = Vector3.Distance(transform.position, markerPos);
+        //Debug.Log("distancce=" + distance + ", pos=" + transform.position + ", marker=" + markerPos);
 
         if (distance < 0.05)
         {
             if (queTarget.Count > 0)
             {
                 Addr tmp = queTarget.Dequeue();
-
-                // ここでオブジェクトチェック
 
                 markerPos = new Vector3(tmp.x - 15, posY, 6 - tmp.z);
             } else
@@ -101,12 +102,160 @@ public class EnemyController : MonoBehaviour
         }
         else
         {
+            //Debug.Log("marker=" + markerPos);
             Toward(markerPos);
         }
     }
 
+    // キョロキョロ
+    void Robe()
+    {
+
+    }
+
+    Direction PreDir = Direction.None;
+
+    // ウロウロ
+    private void Wander()
+    {
+        Debug.Log("wander!");
+
+        if (queTarget.Count > 0) queTarget.Clear();
+
+        /*
+        queTarget.Enqueue(new Addr(17, 5));
+        queTarget.Enqueue(new Addr(17, 4));
+        queTarget.Enqueue(new Addr(17, 3));
+        queTarget.Enqueue(new Addr(17, 2));
+        queTarget.Enqueue(new Addr(17, 1));
+        queTarget.Enqueue(new Addr(17, 2));
+        queTarget.Enqueue(new Addr(17, 3));
+        queTarget.Enqueue(new Addr(17, 4));
+        queTarget.Enqueue(new Addr(17, 5));
+        queTarget.Enqueue(new Addr(17, 6));
+        queTarget.Enqueue(new Addr(17, 7));
+        */
+
+        List<Direction> SearchDir = new List<Direction>();
+        int[] dx = { 0, 0, 0, 0 };
+        int[] dz = { 0, 0, 0, 0 };
+
+        switch (PreDir)
+        {
+            case Direction.Left:
+                SearchDir.Add(Direction.Right);
+                SearchDir.Add(Direction.Left);
+                SearchDir.Add(Direction.Up);
+                SearchDir.Add(Direction.Down);
+
+                int[] dx_right = { 1, -1, 0, 0 };
+                int[] dz_right = { 0, 0, 1, -1 };
+
+                dx = dx_right;
+                dz = dz_right;
+
+                break;
+            case Direction.Up:
+                SearchDir.Add(Direction.Down);
+                SearchDir.Add(Direction.Up);
+                SearchDir.Add(Direction.Left);
+                SearchDir.Add(Direction.Right);
+
+                int[] dx_down = { 0, 0, -1, 1 };
+                int[] dz_down = { -1, 1, 0, 0 };
+
+                dx = dx_down;
+                dz = dz_down;
+
+                break;
+            case Direction.Down:
+                SearchDir.Add(Direction.Up);
+                SearchDir.Add(Direction.Down);
+                SearchDir.Add(Direction.Left);
+                SearchDir.Add(Direction.Right);
+
+                int[] dx_up = { 0, 0, -1, 1 };
+                int[] dz_up = { 1, -1, 0, 0 };
+
+                dx = dx_up;
+                dz = dz_up;
+
+                break;
+            default:
+                SearchDir.Add(Direction.Left);
+                SearchDir.Add(Direction.Right);
+                SearchDir.Add(Direction.Up);
+                SearchDir.Add(Direction.Down);
+
+                int[] dx_left = { -1, 1, 0, 0 };
+                int[] dz_left = { 0, 0, 1, -1 };
+
+                dx = dx_left;
+                dz = dz_left;
+
+                break;
+        }
+
+        Direction SeekDir = Direction.None;
+
+        Vector3 pos;
+        BMObj obj;
+        for (int i = 0; i < 4; i++)
+        {
+            //ChangeDirection(SearchDir[idx]);
+            pos = transform.position + new Vector3(dx[i], transform.position.y, dz[i]);
+            obj = controller.GetObj(pos);
+
+            //Debug.Log("dir=" + SearchDir[i] + ", pos=" + pos + ", obj=" + tmp);
+            switch (obj)
+            {
+                case BMObj.HardBlock:
+                case BMObj.SoftBlock:
+                    break;
+                default:
+                    SeekDir = SearchDir[i];
+                    queTarget.Enqueue(controller.Pos2Addr(pos));
+                    PreDir = SeekDir;
+                    break;
+            }
+
+            if (SeekDir != Direction.None) break;
+        }
+
+        int[] dx_tmp = { 1, 0, -1, 0 };
+        int[] dz_tmp = { 0, -1, 0, 1 };
+
+        dx = dx_tmp;
+        dz = dz_tmp;
+        
+        ChangeDirection(SeekDir);
+
+        bool isEmpty = true;
+
+        pos = transform.position + new Vector3(dx[(int)SeekDir], transform.position.y, dz[(int)SeekDir]);
+        while (isEmpty)
+        {
+            pos += new Vector3(dx[(int)SeekDir], pos.y, dz[(int)SeekDir]);
+            obj = controller.GetObj(pos);
+
+            switch (obj)
+            {
+                case BMObj.HardBlock:
+                case BMObj.SoftBlock:
+                    isEmpty = false;
+                    break;
+                default:
+                    queTarget.Enqueue(controller.Pos2Addr(pos));
+                    break;
+            }
+        }
+
+    }
+
     void Toward(Vector3 pos)
     {
+        Debug.Log("(Toward) pos=" + pos);
+
         Direction d = Direction.None;
 
         Vector3 sub = transform.position - pos;
@@ -160,77 +309,13 @@ public class EnemyController : MonoBehaviour
             {
                 Debug.Log("enemy hit " + hit.transform.tag);
 
-                queTarget.Clear();
-
-                //return;
+                //queTarget.Clear();
             }
         }
 
         transform.position += transform.forward * speed;
 
         //transform.Translate(transform.forward * 0.01f); // これだとダメ
-    }
-
-    // キョロキョロ
-    void Robe()
-    {
-
-    }
-
-    Direction preDir = Direction.None;
-
-    // ウロウロ
-    private void Wander()
-    {
-        Direction[] SearchDir = { Direction.Left, Direction.Right, Direction.Up, Direction.Down };
-
-        int[] dx = { -1, 1, 0, 0 };
-        int[] dz = { 0, 0, 1, -1 };
-
-
-        Vector3 tmpPos = new Vector3(0, 0, 0);
-
-        bool find = false;
-
-        for (int i = 0; i < 4; i++)
-        {
-            ChangeDirection(SearchDir[i]);
-
-            RaycastHit hit;
-            if (Physics.Raycast(transform.position, transform.forward, out hit, 28))
-            {
-                switch (hit.transform.tag)
-                {
-                    case "HardBlock":
-                    case "SoftBlock":
-                        if (Vector3.Distance(transform.position, hit.transform.position) > 1.05f)
-                        {
-                            tmpPos = hit.transform.position - new Vector3(dx[i], 0, dz[i]);
-                            find = true;
-                        }
-                        break;
-                    case "Player":
-                        if (Vector3.Distance(transform.position, hit.transform.position) > 1.05f)
-                        {
-                            tmpPos = hit.transform.position;
-                            find = true;
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            targetObj.transform.position = tmpPos;
-
-            Debug.Log("dir=" + SearchDir[i] + " find? " + find);
-            Debug.Log("pos=" + transform.position + " hit(" + hit.transform.tag + ")=" + hit.transform.position);
-            Debug.Log("distance=" + Vector3.Distance(transform.position, hit.transform.position));
-
-            if (find) break;
-        }
-
-        SearchShortestPath(targetObj.transform.position);
     }
 
     void SearchShortestPath(Vector3 targetPos)
