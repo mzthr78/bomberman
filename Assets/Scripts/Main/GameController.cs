@@ -179,6 +179,11 @@ public class GameController : MonoBehaviour
         if (Physics.Raycast(ray, out hit))
         {
             MousePosition.text = "(" + hit.point.x + ", " + hit.point.z + ")";
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                Debug.Log(GetObj(new Vector3(Mathf.Round(hit.point.x), hit.point.y, Mathf.Round(hit.point.z))) + "(" + Mathf.Round(hit.point.x) + ", " + Mathf.Round(hit.point.z) + ")");
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.X))

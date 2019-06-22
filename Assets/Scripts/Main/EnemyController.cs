@@ -76,22 +76,14 @@ public class EnemyController : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             freeze = !freeze;
-            //Wander();
         }
 
         if (freeze) return;
 
         float distance = Vector3.Distance(transform.position, markerPos);
-        //Debug.Log("distancce=" + distance + ", pos=" + transform.position + ", marker=" + markerPos);
 
         if (distance < 0.05)
         {
-            if (Random.Range(0, 100) < 5)
-            {
-                PreDir = Direction.None;
-                Wander();
-            }
-
             if (queTarget.Count > 0)
             {
                 Addr tmp = queTarget.Dequeue();
@@ -108,7 +100,6 @@ public class EnemyController : MonoBehaviour
         }
         else
         {
-            //Debug.Log("marker=" + markerPos);
             Toward(markerPos);
         }
     }
@@ -117,7 +108,11 @@ public class EnemyController : MonoBehaviour
     IEnumerator Robe()
     {
         ChangeDirection(Direction.Down);
-        yield return new WaitForSeconds(0.2f);
+
+        float waitsec = Random.Range(0, 40) * 0.1f + 0.2f;
+
+        yield return new WaitForSeconds(waitsec);
+
         Wander();
     }
 
@@ -126,8 +121,6 @@ public class EnemyController : MonoBehaviour
     // ウロウロ
     private void Wander()
     {
-        Debug.Log("wander! PreDir=" + PreDir);
-
         if (queTarget.Count > 0) queTarget.Clear();
 
         /*
@@ -147,6 +140,11 @@ public class EnemyController : MonoBehaviour
         List<Direction> SearchDir = new List<Direction>();
         int[] dx = { 0, 0, 0, 0 };
         int[] dz = { 0, 0, 0, 0 };
+
+        if (Random.Range(0, 100) < 10)
+        {
+            PreDir = (Direction)Random.Range(0, 4);
+        }
 
         switch (PreDir)
         {
@@ -206,15 +204,12 @@ public class EnemyController : MonoBehaviour
 
         Direction SeekDir = Direction.None;
 
-        
         BMObj obj;
         for (int i = 0; i < 4; i++)
         {
-            //ChangeDirection(SearchDir[idx]);
             Vector3 pos = transform.position + new Vector3(dx[i], transform.position.y, dz[i]);
             obj = controller.GetObj(pos);
 
-            //Debug.Log("dir=" + SearchDir[i] + ", pos=" + pos + ", obj=" + tmp);
             switch (obj)
             {
                 case BMObj.HardBlock:
@@ -222,7 +217,6 @@ public class EnemyController : MonoBehaviour
                     break;
                 default:
                     SeekDir = SearchDir[i];
-                    //queTarget.Enqueue(controller.Pos2Addr(pos));
                     PreDir = SeekDir;
                     break;
             }
@@ -253,7 +247,6 @@ public class EnemyController : MonoBehaviour
                     isEmpty = false;
                     break;
                 default:
-                    //queTarget.Enqueue(controller.Pos2Addr(pos));
                     prePos = pos;
                     break;
             }
@@ -266,7 +259,6 @@ public class EnemyController : MonoBehaviour
         Direction d = Direction.None;
 
         Vector3 sub = transform.position - pos;
-        //Debug.Log("sub="+sub);
 
         if (Mathf.Abs(sub.x) > 0.1f)
         {
@@ -278,8 +270,6 @@ public class EnemyController : MonoBehaviour
             if (sub.z > 0) d = Direction.Down;
             else d = Direction.Up;
         }
-
-        //Debug.Log("(toward) d = " + d + " transform.position=" + transform.position + " target=" + target);
 
         Move(d);
     }
@@ -310,7 +300,6 @@ public class EnemyController : MonoBehaviour
         ChangeDirection(d);
 
         RaycastHit hit;
-        //if (Physics.Raycast(transform.position, transform.forward, out hit, 28)) {
         if (Physics.Raycast(transform.position, transform.forward, out hit, 1)) {
             if (IsObstruct(hit.transform.tag))
             {
@@ -321,7 +310,6 @@ public class EnemyController : MonoBehaviour
         }
 
         transform.position += transform.forward * speed;
-
         //transform.Translate(transform.forward * 0.01f); // これだとダメ
     }
 
@@ -336,8 +324,6 @@ public class EnemyController : MonoBehaviour
         rz = Mathf.Round(transform.position.z);
         Addr start = new Addr((int)rx + 15, 6 - (int)rz);
 
-        //rx = Mathf.Round(player.position.x);
-        //rz = Mathf.Round(player.position.z);
         rx = Mathf.Round(targetPos.x);
         rz = Mathf.Round(targetPos.z);
 

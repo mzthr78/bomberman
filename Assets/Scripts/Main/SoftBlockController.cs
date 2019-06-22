@@ -7,6 +7,7 @@ public class SoftBlockController : MonoBehaviour
     GameController controller;
 
     public GameObject DoorPrefab;
+
     public GameObject ItemFirePrefab;
     public GameObject ItemBombPrefab;
     public GameObject ItemSpeedPrefab;
@@ -30,20 +31,29 @@ public class SoftBlockController : MonoBehaviour
         this.isItem = b;
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.transform.tag == "Fire")
+        {
+            Destroy(gameObject);
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Fire")
         {
-            //StartCoroutine(Broken());
-            Broken();
+            Destroy(gameObject);
         }
     }
 
     int broken = 0;
 
-    void Broken()
+    private void OnDestroy()
     {
-        //Debug.Log(name + "(Broken)" + broken++);
+        Debug.Log(name + "(OnDestroy)" + transform.position);
+
+        Debug.Log(transform.position + "=" + controller.GetObj(transform.position) + "(before)");
 
         if (isDoor)
         {
@@ -82,9 +92,8 @@ public class SoftBlockController : MonoBehaviour
         else
         {
             controller.SetObj(transform.position, BMObj.Empty);
-            //Debug.Log("aaa");
         }
-        Destroy(gameObject);
-        //yield return null;
+
+        Debug.Log(transform.position + "=" + controller.GetObj(transform.position) + "(after)");
     }
 }
