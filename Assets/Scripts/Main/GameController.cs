@@ -209,12 +209,12 @@ public class GameController : MonoBehaviour
 
     public BMObj GetObj(Vector3 pos)
     {
-        return map[6 - (int)pos.z][15 + (int)pos.x];
+        return map[6 - (int)Mathf.Round(pos.z)][15 + (int)Mathf.Round(pos.x)];
     }
 
     public void SetObj(Vector3 pos, BMObj bmObj)
     {
-        map[6 - (int)pos.z][15 + (int)pos.x] = bmObj;
+        map[6 - (int)Mathf.Round(pos.z)][15 + (int)Mathf.Round(pos.x)] = bmObj;
     }
 
     void Shuffle(List<BMObj> list)

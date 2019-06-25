@@ -11,13 +11,6 @@ public enum Direction
     Up = 3,
 }
 
-enum EnemyAction
-{
-    Idle,
-    Robe,
-    Wander,
-}
-
 public class EnemyController : MonoBehaviour
 {
     public GameObject GameController;
@@ -455,9 +448,9 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    bool IsObstruct(string t)
+    bool IsObstruct(string s)
     {
-        switch (t)
+        switch (s)
         {
             case "HardBlock":
             case "SoftBlock":
@@ -468,9 +461,9 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    void PutPanel(Addr p, int n, bool b = false)
+    void PutPanel(Addr a, int n, bool b = false)
     {
-        Vector3 pos = new Vector3(p.x - 15, -0.45f, 6 - p.z);
+        Vector3 pos = new Vector3(a.x - 15, -0.45f, 6 - a.z);
         GameObject infoPanel = Instantiate(debugPanelPrefab, pos, Quaternion.identity);
         infoPanel.GetComponent<DebugPanelController>().SetText(n.ToString());
 
