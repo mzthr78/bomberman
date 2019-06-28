@@ -6,10 +6,16 @@ public class BallomController : MonoBehaviour
 {
     public GameObject GameController;
     GameController controller;
+    RouteScript routeScript;
 
     public Transform player;
 
-    public GameObject debugPanelPrefab;
+    public GameObject TargetPrefab;
+    public GameObject RoutePanelPrefab;
+
+    private GameObject TargetObj1;
+    private GameObject TargetObj2;
+    private int targetNum = 0;
 
     int stageWidth = 0;
     int stageHeight = 0;
@@ -17,6 +23,14 @@ public class BallomController : MonoBehaviour
     private void Awake()
     {
         controller = GameController.GetComponent<GameController>();
+
+        TargetObj1 = Instantiate(TargetPrefab, transform.position, Quaternion.identity);
+        TargetObj1.GetComponent<Renderer>().material.color = Color.blue;
+
+        TargetObj2 = Instantiate(TargetPrefab, transform.position, Quaternion.identity);
+        TargetObj2.GetComponent<Renderer>().material.color = Color.red;
+
+        routeScript = GetComponent<RouteScript>();
     }
 
     Vector3 startPos;
@@ -27,7 +41,7 @@ public class BallomController : MonoBehaviour
     bool freeze = false;
     float speed = 0.033f;
 
-    Queue<Addr> queTarget;
+    Queue<Addr> queRoute;
 
     public void Freeze(bool b = true)
     {
@@ -44,32 +58,87 @@ public class BallomController : MonoBehaviour
         posY = transform.position.y;
         markerPos = transform.position;
 
-        queTarget = new Queue<Addr>();
+        queRoute = new Queue<Addr>();
 
         stageWidth = controller.GetStageWidth();
         stageHeight = controller.GetStageHeight();
 
         freeze = false;
 
-        Wander();
+        //Wander();
+        // 初期の目的地[0]を設定
+        List<Addr> route = new List<Addr>();
+        route = routeScript.GetDeadEndOne(controller.Pos2Addr(transform.position));
+
+        for (int i = 0; i < route.Count; i++)
+        {
+            queRoute.Enqueue(route[i]);
+        }
+        TargetObj1.transform.position = controller.Addr2Pos(route[route.Count - 1]);
+
+        // 初期の目的地[1]を設定
+        route = new List<Addr>();
+        route = routeScript.GetDeadEndOne(controller.Pos2Addr(transform.position));
+        TargetObj2.transform.position = controller.Addr2Pos(route[route.Count - 1]);
+
+        int count = 0;
+        while (TargetObj1.transform.position == TargetObj2.transform.position && count < 1000)
+        {
+            route = new List<Addr>();
+            route = routeScript.GetDeadEndOne(controller.Pos2Addr(transform.position));
+            TargetObj2.transform.position = controller.Addr2Pos(route[route.Count - 1]);
+            count++;
+        }
     }
+
+    private void ChangeTarget(GameObject obj)
+    {
+        Addr start = controller.Pos2Addr(transform.position);
+        List<Addr> route = routeScript.GetDeadEndOne(start);
+        obj.transform.position = controller.Addr2Pos(route[route.Count - 1]);
+    }
+
+    float span = 2;
+    float delta = 0;
 
     private void FixedUpdate()
     {
+        
         if (Input.GetMouseButtonDown(0))
         {
-            freeze = !freeze;
+            //freeze = !freeze;
+            ///aaa
+
+            ChangeTarget(TargetObj1);
+            ChangeTarget(TargetObj2);
         }
 
         if (freeze) return;
+
+        delta += Time.deltaTime;
+
+        if (delta > 2)
+        {
+            delta = 0;
+
+            if (Random.Range(0, 1000) < 100)
+            {
+                ChangeTarget(TargetObj1);
+            }
+
+            if (Random.Range(0, 1000) < 100)
+            {
+                ChangeTarget(TargetObj2);
+            }
+        }
 
         float distance = Vector3.Distance(transform.position, markerPos);
 
         if (distance < 0.05)
         {
-            if (queTarget.Count > 0)
+            if (queRoute.Count > 0)
             {
-                Addr tmp = queTarget.Dequeue();
+                Addr tmp = queRoute.Dequeue();
 
                 markerPos = new Vector3(tmp.x - 15, posY, 6 - tmp.z);
             }
@@ -77,9 +146,9 @@ public class BallomController : MonoBehaviour
             {
                 StartCoroutine(Robe());
 
-                Addr tmp = queTarget.Dequeue();
-                markerPos = new Vector3(tmp.x - 15, posY, 6 - tmp.z);
-
+                //Addr tmp = queRoute.Dequeue();
+                //markerPos = new Vector3(tmp.x - 15, posY, 6 - tmp.z);
+                FlipTarget();
             }
         }
         else
@@ -92,40 +161,39 @@ public class BallomController : MonoBehaviour
 
             if (Vector3.Distance(transform.position, rp) < 0.05f)
             {
-                bool isEmpty = false;
-
-                Vector3 left = new Vector3(-1, 0, 0);
-                Vector3 right = new Vector3(1, 0, 0);
-                Vector3 up = new Vector3(0, 0, 1);
-                Vector3 down = new Vector3(0, 0, -1);
-
-                Vector3 fd = transform.forward;
-                Vector3 pos;
-
-                if (fd == left || fd == right)
+                if (Random.Range(0, 1000) < 100)
                 {
-                    pos = transform.position + up;
-                    //Debug.Log(transform.position + "↑" + pos + " " + controller.GetObj(pos));
-
-                    pos = transform.position + down;
-                    //Debug.Log(transform.position + "↓" + pos + " " + controller.GetObj(pos));
-
-                    if (IsEmpty(controller.GetObj(transform.position + up))) isEmpty = true;
-                    if (IsEmpty(controller.GetObj(transform.position + down))) isEmpty = true;
-
-                    Debug.Log(pos + " is " + isEmpty);
+                    //Debug.Log("a!");
                 }
-                else
-                {
-                    Debug.Log("up or down");
-                    if (IsEmpty(controller.GetObj(transform.position + left))) isEmpty = true;
-                    if (IsEmpty(controller.GetObj(transform.position + right))) isEmpty = true;
-                }
-
-                if (isEmpty) Debug.Log("!!! Empty !!! " + " " + transform.position);
             }
 
             Toward(markerPos);
+        }
+    }
+
+    private void FlipTarget()
+    {
+        if (targetNum == 0) targetNum = 1;
+        else targetNum = 0;
+
+        Addr start = controller.Pos2Addr(transform.position);
+        Addr goal;
+
+        if (targetNum == 0)
+        {
+            goal = controller.Pos2Addr(TargetObj1.transform.position);
+        }
+        else
+        {
+            goal = controller.Pos2Addr(TargetObj2.transform.position);
+        }
+
+        List<Addr> route = routeScript.GetShortestRoute(start, goal);
+
+        queRoute.Clear();
+        for (int i = 0; i < route.Count; i++)
+        {
+            queRoute.Enqueue(route[i]);
         }
     }
 
@@ -150,16 +218,14 @@ public class BallomController : MonoBehaviour
         float waitsec = Random.Range(0, 40) * 0.1f + 0.2f;
 
         yield return new WaitForSeconds(waitsec);
-
-        Wander();
     }
 
     Direction PreDir = Direction.None;
 
     // ウロウロ
-    private void Wander()
+    private void Wander_BOTSU()
     {
-        if (queTarget.Count > 0) queTarget.Clear();
+        if (queRoute.Count > 0) queRoute.Clear();
 
         /*
         queTarget.Enqueue(new Addr(17, 5));
@@ -284,7 +350,8 @@ public class BallomController : MonoBehaviour
                     break;
             }
         }
-        queTarget.Enqueue(controller.Pos2Addr(prePos));
+
+        queRoute.Enqueue(controller.Pos2Addr(prePos));
     }
 
     void Toward(Vector3 pos)
@@ -332,12 +399,13 @@ public class BallomController : MonoBehaviour
     {
         ChangeDirection(d);
 
+        // ここだとダメ。
         RaycastHit hit;
         if (Physics.Raycast(transform.position, transform.forward, out hit, 1))
         {
             if (IsObstruct(hit.transform.tag))
             {
-                Debug.Log("enemy hit " + hit.transform.tag);
+                //Debug.Log("enemy hit " + hit.transform.tag);
 
                 //queTarget.Clear();
             }
@@ -370,18 +438,6 @@ public class BallomController : MonoBehaviour
                 return true;
             default:
                 return false;
-        }
-    }
-
-    void PutPanel(Addr a, int n, bool b = false)
-    {
-        Vector3 pos = new Vector3(a.x - 15, -0.45f, 6 - a.z);
-        GameObject infoPanel = Instantiate(debugPanelPrefab, pos, Quaternion.identity);
-        infoPanel.GetComponent<DebugPanelController>().SetText(n.ToString());
-
-        if (b)
-        {
-            infoPanel.GetComponent<Renderer>().material.color = Color.red;
         }
     }
 }

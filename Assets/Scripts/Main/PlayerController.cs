@@ -81,7 +81,7 @@ public class PlayerController : MonoBehaviour
             {
                 GameObject Bomb = Instantiate(BombPrefab, pos, Quaternion.identity);
 
-                controller.SetObj(pos, BMObj.Bomb);
+                //controller.SetObj(pos, BMObj.Bomb);
 
                 this.BombRemain--;
             } else

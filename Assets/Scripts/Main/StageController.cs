@@ -46,20 +46,24 @@ public class StageController : MonoBehaviour
         // 1 .. n - 1 line
         for (int i = 1; i < height; i++)
         {
+            // 　Odd Lines
             if (i % 2 != 0)
             {
                 GameObject HardBlock;
 
                 Vector3 pos;
 
+                // Left Side
                 pos = new Vector3(posX + 0, posY, posZ - i);
                 HardBlock = Instantiate(HardBlockPrefab, pos, Quaternion.identity);
                 HardBlock.transform.parent = HardBlockParent;
 
+                // Right Side
                 pos = new Vector3(posX + width - 1, posY, posZ - i);
                 HardBlock = Instantiate(HardBlockPrefab, pos, Quaternion.identity);
                 HardBlock.transform.parent = HardBlockParent;
             }
+            // Even Lines
             else
             {
                 for (int j = 0; j < width; j++)

@@ -43,17 +43,18 @@ public class SoftBlockController : MonoBehaviour
     {
         if (other.tag == "Fire")
         {
+            Broken();
             Destroy(gameObject);
         }
     }
 
     int broken = 0;
 
-    private void OnDestroy()
+    private void Broken()
     {
-        Debug.Log(name + "(OnDestroy)" + transform.position);
+        //Debug.Log(name + "(OnDestroy)" + transform.position);
 
-        Debug.Log(transform.position + "=" + controller.GetObj(transform.position) + "(before)");
+        //Debug.Log(transform.position + "=" + controller.GetObj(transform.position) + "(before)");
 
         if (isDoor)
         {
@@ -94,6 +95,6 @@ public class SoftBlockController : MonoBehaviour
             controller.SetObj(transform.position, BMObj.Empty);
         }
 
-        Debug.Log(transform.position + "=" + controller.GetObj(transform.position) + "(after)");
+        //Debug.Log(transform.position + "=" + controller.GetObj(transform.position) + "(after)");
     }
 }

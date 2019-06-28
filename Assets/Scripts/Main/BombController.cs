@@ -80,7 +80,7 @@ public class BombController : MonoBehaviour
             }
         }
 
-        controller.SetObj(gameObject.transform.position, BMObj.Empty);
+        controller.SetObj(transform.position, BMObj.Empty);
 
         Destroy(gameObject);
 

@@ -206,7 +206,7 @@ public class DummyController : MonoBehaviour
         {
             GameObject infoPanel = Instantiate(debugPanelPrefab, transform.position, Quaternion.identity);
             infoPanel.transform.Translate(dx[i], -0.8f, dz[i]);
-            infoPanel.GetComponent<DebugPanelController>().SetText(i.ToString());
+            infoPanel.GetComponent<InfoPanelController>().SetText(i.ToString());
         }
     }
 
@@ -226,7 +226,7 @@ public class DummyController : MonoBehaviour
     {
         Vector3 pos = new Vector3(p.x - 15, -0.45f, 6 - p.z);
         GameObject infoPanel = Instantiate(debugPanelPrefab, pos, Quaternion.identity);
-        infoPanel.GetComponent<DebugPanelController>().SetText(n.ToString());
+        infoPanel.GetComponent<InfoPanelController>().SetText(n.ToString());
 
         if (b)
         {

@@ -27,8 +27,20 @@ public enum PowerUpItem
     Speed = 4,       // ブーツ
     PassBomb = 5,    // 爆弾通過
     PassWall = 6,    // 壁通過
-    Barrier = 7,     // 火炎バリア
+    PassFire = 7,     // 火炎バリア
     Immortality = 8, // パーフェクトマン
+}
+
+public enum Enemy
+{
+    Ballom = 0,
+    Onil = 1,
+    Daru = 2,
+    Minbo = 3,
+    Chondria = 4,
+    Obapi = 5,
+    Pass = 6,
+    Pontan = 7,
 }
 
 public struct Addr
@@ -45,13 +57,15 @@ public struct Addr
 
 public class GameController : MonoBehaviour
 {
+    bool isDebug = true;
+
     public GameObject stage;
     public GameObject mainCamera;
     public GameObject player;
     PlayerController pcon;
 
     public Text MousePosition;
-    public Text DebugInfoText;
+    public Text InfoText;
 
     public AudioClip StageClearSE;
 
@@ -59,12 +73,27 @@ public class GameController : MonoBehaviour
     static int[] PlayerStatusNumArr = { 0, 1, 1, 0, 0, 0, 0, 0, 0 };
     static ViewPoint viewPoint;
 
-    private int stageWidth;
-    private int stageHeight;
-
     int maxStage = 50;
 
-    string ItemString = "012342213562235162523532358123762385731683653865378";　// Item(s) of Stage[0 .. 50]
+    string ItemString = "012342213562235162523532358123762385731683653865378"; // Item(s) of Stage[0 .. 50]
+
+    int[,] EnemiesOfStage = {
+      {6, 0, 0, 0, 0, 0, 0, 0 }, // Stage 01 ballom:6, onil:0, ...
+      {3, 3, 0, 0, 0, 0, 0, 0 }, // Stage 02 ballom:3, onil:3, ...
+      {2, 2, 2, 0, 0, 0, 0, 0 }, // Stage 03 ballom:2, onil:2, daru:2, ...
+      {1, 1, 2, 2, 0, 0, 0, 0 }, // Stage 04
+      {0, 3, 3, 0, 0, 0, 0, 0 }, // Stage 05
+    };
+
+    // Enemies
+    public GameObject BallomPrefab;
+    public GameObject OnilPrefab;
+    public GameObject DaruPrefab;
+    public GameObject MinboPrefab;
+    public GameObject ChondriaPrefab;
+    public GameObject ObapiPrefab;
+    public GameObject PassPrefab;
+    public GameObject PontanPrefab;
 
     List<List<BMObj>> map = new List<List<BMObj>>();
 
@@ -129,17 +158,17 @@ public class GameController : MonoBehaviour
 
     public int GetStageWidth()
     {
-        return this.stageWidth;
+        return stage.GetComponent<StageController>().GetWidth();
     }
 
     public int GetStageHeight()
     {
-        return this.stageHeight;
+        return stage.GetComponent<StageController>().GetHeight();
     }
 
     public Addr Pos2Addr(Vector3 pos)
     {
-        return new Addr((int)pos.x + 15, 6 - (int)pos.z);
+        return new Addr((int)Mathf.Round(pos.x) + 15, 6 - (int)Mathf.Round(pos.z));
     }
 
     public Vector3 Addr2Pos(Addr addr)
@@ -158,17 +187,52 @@ public class GameController : MonoBehaviour
         player.transform.position = new Vector3(posX, 0, posZ);
 
         aud = GetComponent<AudioSource>();
-    }
+	}
 
-    void Start()
+	void Start()
     {
-        InitSeed();
+        if (isDebug)
+        {
+            //LoadMapText();
+            InitMapObj();
+        }
+        else
+        {
+            InitMapObj();
+        }
+        
         InitBObjects();
+        InitEnemies();
 
         aud.Play();
 
-        stageWidth = stage.GetComponent<StageController>().GetWidth();
-        stageHeight = stage.GetComponent<StageController>().GetHeight();
+        for (int i = 0; i < EnemiesOfStage.GetLength(1); i++)
+        {
+            Debug.Log(i + "(" + (Enemy)i + ")="  + EnemiesOfStage[GetStageNum() - 1, i]);
+        }
+
+        /*
+        for (int i = 0; i < EnemiesOfStage.GetLength(0); i++)
+        {
+            for (int j = 0; j < EnemiesOfStage.GetLength(1); j++)
+            {
+                Debug.Log("[" + i + "][" + j + "]" + EnemiesOfStage[i, j]);
+            }
+        }
+        */
+
+        /*
+		for (int i = 0; i < EnemiesOfStage.Count; i++)
+		{
+            string s = "";
+			for (int j = 0; j < EnemiesOfStage[i].Count; j++)
+			{
+                s += EnemiesOfStage[i][j];
+			}
+            Debug.Log(stage + "[" + i + "]" + s);
+		}
+        */
+
     }
 
     // Update is called once per frame
@@ -195,16 +259,16 @@ public class GameController : MonoBehaviour
             SceneManager.LoadScene("GameOverScene");
         }
 
-        DebugInfo();
+        Info();
     }
 
-    public void DebugInfo()
+    public void Info()
     {
         string tmp = "";
 
         tmp += "ViewPoint = " + viewPoint + "\n";
 
-        DebugInfoText.text = tmp;
+        InfoText.text = tmp;
     }
 
     public BMObj GetObj(Vector3 pos)
@@ -228,9 +292,9 @@ public class GameController : MonoBehaviour
         }
     }
 
-    Queue<BMObj> seed;
+    Queue<BMObj> queObj = new Queue<BMObj>();
 
-    void InitSeed()
+    void InitMapObj()
     {
         // outer floor = 31 * 13 = 403
         // inner floor = 29 * 11 = 319
@@ -240,10 +304,10 @@ public class GameController : MonoBehaviour
         int SoftBlockCount = 50 + (stageNum - 1);
 
         // Empty
-        List<BMObj> tmp = Enumerable.Repeat(BMObj.Empty, 246 - (SoftBlockCount)).ToList();
+        List<BMObj> tmp = Enumerable.Repeat(BMObj.Empty, 246 - (SoftBlockCount)).ToList(); //Enumerable(System.Linq)
 
         // SoftBlock
-        tmp.AddRange(Enumerable.Repeat(BMObj.SoftBlock, SoftBlockCount).ToList());
+        tmp.AddRange(Enumerable.Repeat(BMObj.SoftBlock, SoftBlockCount).ToList());  //Enumerable(System.Linq)
 
         // Door
         tmp.Add(BMObj.Door);
@@ -253,20 +317,136 @@ public class GameController : MonoBehaviour
 
         Shuffle(tmp);
 
-        seed = new Queue<BMObj>();
+        queObj = new Queue<BMObj>();
         for (int i = 0; i < tmp.Count; i++)
         {
-            seed.Enqueue(tmp[i]);
+            queObj.Enqueue(tmp[i]);
         }
+    }
+
+    void LoadMapText()
+    {
+        TextAsset textAsset = new TextAsset();
+        textAsset = Resources.Load("testmap", typeof(TextAsset)) as TextAsset;
+        string text = textAsset.text;
+        string[] lines = text.Split('\n');
+
+        for (int i = 0; i < lines.Length; i++)
+        {
+            for (int j = 0; j < lines[i].Length; j++)
+            {
+                if (false)                             { continue; } // ダミーコード
+                else if (i == 0)                       { continue; } // 1行目
+                else if (i == (GetStageHeight() - 1))  { continue; } // 最終行
+                else if (j == 0)                       { continue; } // 1列目
+                else if (j == (GetStageWidth() - 1))   { continue; } // 最終列
+                else if (i == 1 && j == 1)             { continue; } // 1マス目（プレイヤー初期位置）
+                else if (i == 1 && j == 2)             { continue; } // プレイヤーの右隣
+                else if (i == 2 && j == 1)             { continue; } // プレイヤーの真下
+                else if ((i % 2) == 0 && (j % 2) == 0) { continue; } // 柱
+                else
+                {
+                    BMObj obj = BMObj.Empty;
+                    switch (lines[i][j])
+                    {
+                        case '*':
+                            obj = BMObj.SoftBlock;
+                            break;
+                        default:
+                            obj = BMObj.Empty;
+                            break;
+                    }
+                    queObj.Enqueue(obj);
+                }
+            }
+        }
+        Debug.Log("queobj.count=" + queObj.Count);
     }
 
     //int maxRow = 13;
     //int maxCol = 31;
 
+    private void InitEnemies()
+    {
+		List<int> emptyCell = new List<int>();
+
+        for (int i = 0; i < map.Count; i++)
+        {
+            for (int j = 0; j < map[i].Count; j++)
+            {
+                if (i < 5 && j < 5) continue;
+
+                if (GetObj(Addr2Pos(new Addr(j, i))) == BMObj.Empty)
+				{
+                    emptyCell.Add(-1);
+				}
+            }
+        }
+
+        int enemyCount = 0;
+        for (int i = 0; i < EnemiesOfStage.GetLength(1); i++)
+        {
+            for (int j = 0; j < EnemiesOfStage[GetStageNum() - 1, i]; j++)
+            {
+                emptyCell[enemyCount] = i;
+                enemyCount++;
+            }
+        }
+
+        for (int i = 0; i < emptyCell.Count; i++)
+        {
+            int n = Random.Range(0, emptyCell.Count);
+            int tmp = emptyCell[i];
+            emptyCell[i] = emptyCell[n];
+            emptyCell[n] = tmp;
+        }
+
+        for (int i = 0; i < map.Count; i++)
+        {
+            for (int j = 0; j < map[i].Count; j++)
+            {
+                if (i < 5 && j < 5) continue;
+
+
+            }
+        }
+
+        for (int i = 0; i < emptyCell.Count; i++)
+        {
+            if (emptyCell[i] > -1)
+            {
+                switch (emptyCell[i])
+                {
+                    case 1:
+                        break;
+                    /*
+                    case 2:
+                        break;
+                    case 3:
+                        break;
+                    case 4:
+                        break;
+                    case 5:
+                        break;
+                    case 6:
+                        break;
+                    case 7:
+                        break;
+                    */
+                    default:
+                        //GameObject Ballom = Instantiate(BallomPrefab, )
+                        break;
+                }
+            }
+        }
+    }
+
     void InitBObjects()
     {
         int maxRow = stage.GetComponent<StageController>().GetHeight();
         int maxCol = stage.GetComponent<StageController>().GetWidth();
+
+        int count = 0;
 
         for (int i = 0; i < maxRow; i++)
         {
@@ -299,9 +479,10 @@ public class GameController : MonoBehaviour
                 }
                 else
                 {
-                    if (seed.Count > 0)
+                    count++;
+                    if (queObj.Count > 0)
                     {
-                        tmpCol = seed.Dequeue();
+                        tmpCol = queObj.Dequeue();
                     }
                 }
                 tmpLine.Add(tmpCol);
@@ -309,6 +490,7 @@ public class GameController : MonoBehaviour
             }
             map.Add(tmpLine);
         }
+
     }
 
     public List<List<BMObj>> GetMap()

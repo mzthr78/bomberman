@@ -357,7 +357,7 @@ public class EnemyController : MonoBehaviour
 
         for (int i = 0; i < shortest.Count; i++)
         {
-            PutPanel(shortest[i], i, false);
+            //PutPanel(shortest[i], i, false);
             //Debug.Log("shortest[" + i + "] = (" + shortest[i].x + ", " + shortest[i].z);
             queTarget.Enqueue(shortest[i]);
         }
@@ -406,7 +406,7 @@ public class EnemyController : MonoBehaviour
         while (que.Count > 0)
         {
             Addr curr = que.Dequeue();
-            if (debug) PutPanel(curr, BFSCount, false);
+            //if (debug) PutPanel(curr, BFSCount, false);
 
             if (curr.x == goal.x && curr.z == goal.z)
             {
@@ -458,18 +458,6 @@ public class EnemyController : MonoBehaviour
                 return true;
             default:
                 return false;
-        }
-    }
-
-    void PutPanel(Addr a, int n, bool b = false)
-    {
-        Vector3 pos = new Vector3(a.x - 15, -0.45f, 6 - a.z);
-        GameObject infoPanel = Instantiate(debugPanelPrefab, pos, Quaternion.identity);
-        infoPanel.GetComponent<DebugPanelController>().SetText(n.ToString());
-
-        if (b)
-        {
-            infoPanel.GetComponent<Renderer>().material.color = Color.red;
         }
     }
 
