@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class BallomController : MonoBehaviour
 {
-    public GameObject GameController;
+    //public GameObject GameController;
+    GameObject GameController;
     GameController controller;
     RouteScript routeScript;
 
-    public Transform player;
+    //public Transform player;
+    Transform player;
 
     public GameObject TargetPrefab;
     public GameObject RoutePanelPrefab;
-
+    
     private GameObject TargetObj1;
     private GameObject TargetObj2;
     private int targetNum = 0;
@@ -22,15 +24,21 @@ public class BallomController : MonoBehaviour
 
     private void Awake()
     {
+        //Find Object (for Prefab)
+        GameController = GameObject.Find("GameController");
+        player = GameObject.Find("Player").transform;
+        
         controller = GameController.GetComponent<GameController>();
 
         TargetObj1 = Instantiate(TargetPrefab, transform.position, Quaternion.identity);
-        TargetObj1.GetComponent<Renderer>().material.color = Color.blue;
+        TargetObj1.transform.parent = GameObject.Find("Target").transform;
+        //TargetObj1.GetComponent<Renderer>().material.color = Color.blue;
 
         TargetObj2 = Instantiate(TargetPrefab, transform.position, Quaternion.identity);
-        TargetObj2.GetComponent<Renderer>().material.color = Color.red;
+        TargetObj2.transform.parent = GameObject.Find("Target").transform;
+        //TargetObj2.GetComponent<Renderer>().material.color = Color.red;
 
-        routeScript = GetComponent<RouteScript>();
+        routeScript = gameObject.GetComponent<RouteScript>();
     }
 
     Vector3 startPos;
@@ -101,7 +109,7 @@ public class BallomController : MonoBehaviour
     float span = 2;
     float delta = 0;
 
-    private void FixedUpdate()
+    private void Update()
     {
         
         if (Input.GetMouseButtonDown(0))
@@ -121,12 +129,12 @@ public class BallomController : MonoBehaviour
         {
             delta = 0;
 
-            if (Random.Range(0, 1000) < 100)
+            if (Random.Range(0, 10) < 1)
             {
                 ChangeTarget(TargetObj1);
             }
 
-            if (Random.Range(0, 1000) < 100)
+            if (Random.Range(0, 10) < 1)
             {
                 ChangeTarget(TargetObj2);
             }
@@ -153,20 +161,6 @@ public class BallomController : MonoBehaviour
         }
         else
         {
-            float rx = Mathf.Round(transform.position.x);
-            float ry = Mathf.Round(transform.position.y);
-            float rz = Mathf.Round(transform.position.z);
-
-            Vector3 rp = new Vector3(rx, ry, rz);
-
-            if (Vector3.Distance(transform.position, rp) < 0.05f)
-            {
-                if (Random.Range(0, 1000) < 100)
-                {
-                    //Debug.Log("a!");
-                }
-            }
-
             Toward(markerPos);
         }
     }
@@ -438,6 +432,22 @@ public class BallomController : MonoBehaviour
                 return true;
             default:
                 return false;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Fire")
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.transform.tag == "Fire")
+        {
+            Destroy(gameObject);
         }
     }
 }

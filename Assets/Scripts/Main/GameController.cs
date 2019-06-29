@@ -73,6 +73,7 @@ public class GameController : MonoBehaviour
     static int[] PlayerStatusNumArr = { 0, 1, 1, 0, 0, 0, 0, 0, 0 };
     static ViewPoint viewPoint;
 
+    public int SoftBlockNum = 50;
     int maxStage = 50;
 
     string ItemString = "012342213562235162523532358123762385731683653865378"; // Item(s) of Stage[0 .. 50]
@@ -206,10 +207,12 @@ public class GameController : MonoBehaviour
 
         aud.Play();
 
+        /*
         for (int i = 0; i < EnemiesOfStage.GetLength(1); i++)
         {
             Debug.Log(i + "(" + (Enemy)i + ")="  + EnemiesOfStage[GetStageNum() - 1, i]);
         }
+        */
 
         /*
         for (int i = 0; i < EnemiesOfStage.GetLength(0); i++)
@@ -301,7 +304,7 @@ public class GameController : MonoBehaviour
         // hardblock = 14 * 5 = 70
         // walkable = 319 - 70 = 249
 
-        int SoftBlockCount = 50 + (stageNum - 1);
+        int SoftBlockCount = SoftBlockNum + (stageNum - 1);
 
         // Empty
         List<BMObj> tmp = Enumerable.Repeat(BMObj.Empty, 246 - (SoftBlockCount)).ToList(); //Enumerable(System.Linq)
@@ -370,6 +373,7 @@ public class GameController : MonoBehaviour
     {
 		List<int> emptyCell = new List<int>();
 
+        //　Emptyセルの抽出
         for (int i = 0; i < map.Count; i++)
         {
             for (int j = 0; j < map[i].Count; j++)
@@ -383,6 +387,7 @@ public class GameController : MonoBehaviour
             }
         }
 
+        // 敵情報の読み込み
         int enemyCount = 0;
         for (int i = 0; i < EnemiesOfStage.GetLength(1); i++)
         {
@@ -393,6 +398,7 @@ public class GameController : MonoBehaviour
             }
         }
 
+        // データシャッフル
         for (int i = 0; i < emptyCell.Count; i++)
         {
             int n = Random.Range(0, emptyCell.Count);
@@ -401,41 +407,51 @@ public class GameController : MonoBehaviour
             emptyCell[n] = tmp;
         }
 
+        // 敵配置
+        int count = 0;
         for (int i = 0; i < map.Count; i++)
         {
             for (int j = 0; j < map[i].Count; j++)
             {
                 if (i < 5 && j < 5) continue;
 
+                Addr addr = new Addr(j, i);
 
-            }
-        }
-
-        for (int i = 0; i < emptyCell.Count; i++)
-        {
-            if (emptyCell[i] > -1)
-            {
-                switch (emptyCell[i])
+                if (GetObj(Addr2Pos(addr)) == BMObj.Empty)
                 {
-                    case 1:
-                        break;
-                    /*
-                    case 2:
-                        break;
-                    case 3:
-                        break;
-                    case 4:
-                        break;
-                    case 5:
-                        break;
-                    case 6:
-                        break;
-                    case 7:
-                        break;
-                    */
-                    default:
-                        //GameObject Ballom = Instantiate(BallomPrefab, )
-                        break;
+                    if (emptyCell[count] > -1)
+                    {
+                        switch (emptyCell[count])
+                        {
+                            /*
+                            case 0:
+                                break;
+                            */
+                            case 1:
+                                GameObject Onil = Instantiate(OnilPrefab, Addr2Pos(addr), Quaternion.identity);
+                                Onil.transform.parent = GameObject.Find("Onil").transform;
+                                break;
+                            /*
+                            case 2:
+                                break;
+                            case 3:
+                                break;
+                            case 4:
+                                break;
+                            case 5:
+                                break;
+                            case 6:
+                                break;
+                            case 7:
+                                break;
+                            */
+                            default:
+                                GameObject Ballom = Instantiate(BallomPrefab, Addr2Pos(addr), Quaternion.identity);
+                                Ballom.transform.parent = GameObject.Find("Ballom").transform;
+                                break;
+                        }
+                    }
+                    count++;
                 }
             }
         }

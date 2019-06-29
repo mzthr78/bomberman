@@ -7,16 +7,21 @@ public class RouteScript : MonoBehaviour
     bool isDebug = false;
     LogController Logger;
 
-    public Transform RouteAllParent;
-    public Transform RouteShortestParent;
-    public Transform RouteDeadEndParent;
+    //public GameObject GameController;
+    //public Transform RouteAllParent;
+    //public Transform RouteShortestParent;
+    //public Transform RouteDeadEndParent;
+
+    GameObject GameController;
+    Transform RouteAllParent;
+    Transform RouteShortestParent;
+    Transform RouteDeadEndParent;
 
     public void SetDebug(bool b = true)
     {
         isDebug = b;
     }
 
-    public GameObject GameController;
     private GameController controller;
     private List<List<Addr>> shortestArr;
 
@@ -24,11 +29,14 @@ public class RouteScript : MonoBehaviour
 
     private void Awake()
     {
+        // for Prefab
+        GameController = GameObject.Find("GameController");
+        RouteAllParent = GameObject.Find("RouteAll").transform;
+        RouteShortestParent = GameObject.Find("RouteShortest").transform;
+        RouteDeadEndParent = GameObject.Find("RouteDeadEnd").transform;
+
         //controller = GameObject.Find("GameController").GetComponent<GameController>();
         controller = GameController.GetComponent<GameController>();
-
-        Logger = GetComponent<LogController>();
-        Logger.Clear();
     }
 
     private void Start()
@@ -82,11 +90,13 @@ public class RouteScript : MonoBehaviour
 
         //Debug.Log("shortest count = " + shortest.Count);
 
+        /*
         for (int i = 0; i < shortest.Count; i++)
         {
             //Debug.Log(i + " " + controller.Addr2Pos(shortest[i]) + ", (" + shortest[i].x + ", " + shortest[i].z + ")");
             PutPanel(shortest[i], i, Color.blue, RouteShortestParent);
         }
+        */
 
         return shortest;
     }

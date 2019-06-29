@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2713012070168738201}
   m_Layer: 0
-  m_Name: Onil
-  m_TagString: Untagged
+  m_Name: OnilPrefab
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

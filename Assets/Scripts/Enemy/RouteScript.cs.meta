@@ -3,7 +3,13 @@ guid: 018b8a1f9266d4f61a759ae36c2531b0
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - RouteAllParent: {instanceID: 0}
+  - RouteShortestParent: {instanceID: 0}
+  - RouteDeadEndParent: {instanceID: 0}
+  - GameController: {instanceID: 0}
+  - InfoPanelPrefab: {fileID: 942238979325101098, guid: f26908b5969ec4f3fa7777c9d409995e,
+      type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

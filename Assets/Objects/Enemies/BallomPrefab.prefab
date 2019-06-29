@@ -9,10 +9,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 627789666318875975}
+  - component: {fileID: -5818093057224362936}
   - component: {fileID: 627789666318875973}
+  - component: {fileID: 2304403946841783270}
   m_Layer: 0
-  m_Name: Ballom
-  m_TagString: Untagged
+  m_Name: BallomPrefab
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -32,6 +34,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!65 &-5818093057224362936
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 627789666318875974}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &627789666318875973
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44,10 +59,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07fe3b16ae0664d63a0efe1a440e7b93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GameController: {fileID: 0}
-  player: {fileID: 0}
-  TargetPrefab: {fileID: 0}
-  RoutePanelPrefab: {fileID: 0}
+  TargetPrefab: {fileID: 2897101425122450674, guid: 48ed105f20b6e4d428694e451ce8781b,
+    type: 3}
+  RoutePanelPrefab: {fileID: 942238979325101098, guid: f26908b5969ec4f3fa7777c9d409995e,
+    type: 3}
+--- !u!114 &2304403946841783270
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 627789666318875974}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 018b8a1f9266d4f61a759ae36c2531b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  InfoPanelPrefab: {fileID: 942238979325101098, guid: f26908b5969ec4f3fa7777c9d409995e,
+    type: 3}
 --- !u!1001 &627789667577994217
 PrefabInstance:
   m_ObjectHideFlags: 0
