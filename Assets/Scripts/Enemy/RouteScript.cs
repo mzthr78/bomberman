@@ -41,8 +41,6 @@ public class RouteScript : MonoBehaviour
 
     private void Start()
     {
-        width = controller.GetStageWidth();
-        height = controller.GetStageHeight();
 
         isDebug = true;
     }
@@ -52,11 +50,12 @@ public class RouteScript : MonoBehaviour
     private int height; // = 13;
     private bool find;
 
-    // 全探索する場合
-    // 全探索して「行き止まり」のいずれかを選択する場合
-    // 全探索して適当な一地点を選択する場合
-
-    // 最短経路探索をする場合
+    int hoge = 0;
+    void Hoge(string s = "")
+    {
+        Debug.Log("Hoge[" + hoge + "] " + s);
+        hoge++;
+    }
 
     List<Addr> DeadEnd;
 
@@ -103,6 +102,9 @@ public class RouteScript : MonoBehaviour
 
     public bool BFS(Addr start, Addr goal, bool full = false, bool debug = false)
     {
+        width = controller.GetStageWidth();
+        height = controller.GetStageHeight();
+
         // Init
         DeadEnd = new List<Addr>();
 

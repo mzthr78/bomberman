@@ -79,7 +79,8 @@ public class GameController : MonoBehaviour
     string ItemString = "012342213562235162523532358123762385731683653865378"; // Item(s) of Stage[0 .. 50]
 
     int[,] EnemiesOfStage = {
-      {6, 0, 0, 0, 0, 0, 0, 0 }, // Stage 01 ballom:6, onil:0, ...
+      //{6, 0, 0, 0, 0, 0, 0, 0 }, // Stage 01 ballom:6, onil:0, ...
+      {5, 1, 0, 0, 0, 0, 0, 0 }, // Stage 01 ballom:6, onil:0, ...
       {3, 3, 0, 0, 0, 0, 0, 0 }, // Stage 02 ballom:3, onil:3, ...
       {2, 2, 2, 0, 0, 0, 0, 0 }, // Stage 03 ballom:2, onil:2, daru:2, ...
       {1, 1, 2, 2, 0, 0, 0, 0 }, // Stage 04
@@ -192,18 +193,19 @@ public class GameController : MonoBehaviour
 
 	void Start()
     {
-        if (isDebug)
+        bool isAutoPlacement = false;
+
+        if (isAutoPlacement)
         {
-            //LoadMapText();
             InitMapObj();
+            InitBObjects();
+            InitEnemies();
         }
         else
         {
-            InitMapObj();
+            LoadMapText();
+            InitBObjects();
         }
-        
-        InitBObjects();
-        InitEnemies();
 
         aud.Play();
 
