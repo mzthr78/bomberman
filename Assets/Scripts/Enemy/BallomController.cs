@@ -88,12 +88,9 @@ public class BallomController : MonoBehaviour
 
         freeze = false;
 
-        Hoge(1);
-
         //Wander();
         // 初期の目的地[0]を設定
         List<Addr> route = new List<Addr>();
-        Hoge(2);
         route = routeScript.GetDeadEndOne(controller.Pos2Addr(transform.position));
 
         for (int i = 0; i < route.Count; i++)
@@ -101,8 +98,6 @@ public class BallomController : MonoBehaviour
             queRoute.Enqueue(route[i]);
         }
         TargetObj1.transform.position = controller.Addr2Pos(route[route.Count - 1]);
-
-        Hoge(3);
 
         // 初期の目的地[1]を設定
         route = new List<Addr>();
@@ -118,8 +113,8 @@ public class BallomController : MonoBehaviour
             count++;
         }
 
-        Debug.Log("target1 " + TargetObj1.transform.position);
-        Debug.Log("target2 " + TargetObj2.transform.position);
+        //Debug.Log("target1 " + TargetObj1.transform.position);
+        //Debug.Log("target2 " + TargetObj2.transform.position);
     }
 
     private void ChangeTarget(GameObject obj)
@@ -134,16 +129,6 @@ public class BallomController : MonoBehaviour
 
     private void Update()
     {
-        
-        if (Input.GetMouseButtonDown(0))
-        {
-            //freeze = !freeze;
-            ///aaa
-
-            //ChangeTarget(TargetObj1);
-            //ChangeTarget(TargetObj2);
-        }
-
         if (freeze) return;
 
         delta += Time.deltaTime;

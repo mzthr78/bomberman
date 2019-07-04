@@ -9,6 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2713012070168738201}
+  - component: {fileID: 2307887781038531168}
+  - component: {fileID: -101861308457327213}
   m_Layer: 0
   m_Name: OnilPrefab
   m_TagString: Enemy
@@ -31,6 +33,32 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!114 &2307887781038531168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2713012070168738200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cad1f98b1b454f6db361574b9f3393f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-101861308457327213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2713012070168738200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 018b8a1f9266d4f61a759ae36c2531b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  InfoPanelPrefab: {fileID: 942238979325101098, guid: f26908b5969ec4f3fa7777c9d409995e,
+    type: 3}
 --- !u!1001 &2713012071652723920
 PrefabInstance:
   m_ObjectHideFlags: 0

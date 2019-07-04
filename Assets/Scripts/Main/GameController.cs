@@ -73,14 +73,14 @@ public class GameController : MonoBehaviour
     static int[] PlayerStatusNumArr = { 0, 1, 1, 0, 0, 0, 0, 0, 0 };
     static ViewPoint viewPoint;
 
-    public int SoftBlockNum = 50;
+    public int SoftBlockNum = 0;
     int maxStage = 50;
 
     string ItemString = "012342213562235162523532358123762385731683653865378"; // Item(s) of Stage[0 .. 50]
 
     int[,] EnemiesOfStage = {
       //{6, 0, 0, 0, 0, 0, 0, 0 }, // Stage 01 ballom:6, onil:0, ...
-      {5, 1, 0, 0, 0, 0, 0, 0 }, // Stage 01 ballom:6, onil:0, ...
+      {3, 3, 0, 0, 0, 0, 0, 0 }, // Stage 01 ballom:6, onil:0, ...
       {3, 3, 0, 0, 0, 0, 0, 0 }, // Stage 02 ballom:3, onil:3, ...
       {2, 2, 2, 0, 0, 0, 0, 0 }, // Stage 03 ballom:2, onil:2, daru:2, ...
       {1, 1, 2, 2, 0, 0, 0, 0 }, // Stage 04
@@ -193,7 +193,7 @@ public class GameController : MonoBehaviour
 
 	void Start()
     {
-        bool isAutoPlacement = false;
+        bool isAutoPlacement = true;
 
         if (isAutoPlacement)
         {
@@ -352,10 +352,41 @@ public class GameController : MonoBehaviour
                 else
                 {
                     BMObj obj = BMObj.Empty;
+
+                    Addr addr = new Addr(j, i);
+
                     switch (lines[i][j])
                     {
                         case '*':
                             obj = BMObj.SoftBlock;
+                            break;
+						case 'A':
+                            Debug.Log("Ballom");
+                            GameObject Ballom = Instantiate(BallomPrefab, Addr2Pos(addr), Quaternion.identity);
+                            Ballom.transform.parent = GameObject.Find("Ballom").transform;
+							break;
+                        case 'B':
+                            Debug.Log("Onil");
+                            GameObject Onil = Instantiate(OnilPrefab, Addr2Pos(addr), Quaternion.identity);
+                            Onil.transform.parent = GameObject.Find("Onil").transform;
+                            break;
+                        case 'C':
+                            Debug.Log("Daru");
+                            break;
+                        case 'D':
+                            Debug.Log("Minbo");
+                            break;
+                        case 'E':
+                            Debug.Log("Chondria");
+                            break;
+                        case 'F':
+                            Debug.Log("Obapi");
+                            break;
+                        case 'G':
+                            Debug.Log("Pass");
+                            break;
+                        case 'H':
+                            Debug.Log("Pontan");
                             break;
                         default:
                             obj = BMObj.Empty;
@@ -365,7 +396,7 @@ public class GameController : MonoBehaviour
                 }
             }
         }
-        Debug.Log("queobj.count=" + queObj.Count);
+        //Debug.Log("queobj.count=" + queObj.Count);
     }
 
     //int maxRow = 13;
@@ -508,7 +539,21 @@ public class GameController : MonoBehaviour
             }
             map.Add(tmpLine);
         }
+    }
 
+    // for Test
+    void PutEnemies()
+    {
+        int height = stage.GetComponent<StageController>().GetHeight();
+        int width = stage.GetComponent<StageController>().GetWidth();
+
+        for (int i = 0; i < height; i++)
+        {
+            for (int j = 0; j < width; j++)
+            {
+
+            }
+        }
     }
 
     public List<List<BMObj>> GetMap()

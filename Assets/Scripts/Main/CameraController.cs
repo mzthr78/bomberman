@@ -68,7 +68,8 @@ public class CameraController : MonoBehaviour
         switch (v)
         {
             case ViewPoint.Diagonally:
-                offset = new Vector3(0, 5.5f, -6f) - new Vector3(0, 0, 0);
+                //offset = new Vector3(0, 5.5f, -6f) - new Vector3(0, 0, 0);
+                offset = new Vector3(0, 5.5f, -5f) - new Vector3(0, 0, 0);
                 transform.rotation = Quaternion.Euler(50, 0, 0);
                 break;
             case ViewPoint.TPP:
