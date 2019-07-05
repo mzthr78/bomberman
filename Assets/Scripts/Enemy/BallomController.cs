@@ -40,7 +40,7 @@ public class BallomController : MonoBehaviour
 
         routeScript = gameObject.GetComponent<RouteScript>();
 
-        Debug.Log("routeScript" + routeScript.ToString());
+        //Debug.Log("routeScript" + routeScript.ToString());
     }
 
     Vector3 startPos;

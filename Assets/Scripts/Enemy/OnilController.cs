@@ -48,16 +48,16 @@ public class OnilController : MonoBehaviour
 
         if (Vector3.Distance(transform.position, rp) < 0.05)
         {
-            Debug.Log("pos=" + transform.position);
+            //Debug.Log("pos=" + transform.position);
 
             if (!Physics.Raycast(transform.position, transform.right, out hit, 1))
             {
-                Debug.Log("right!");
+                //Debug.Log("right!");
             }
 
             if (!Physics.Raycast(transform.position, transform.right * -1, out hit, 1))
             {
-                Debug.Log("left!");
+                //Debug.Log("left!");
             }
         }
 
