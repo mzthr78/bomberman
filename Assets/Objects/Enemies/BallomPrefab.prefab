@@ -59,6 +59,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07fe3b16ae0664d63a0efe1a440e7b93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PointTextPrefab: {fileID: 2203507430306462511, guid: d55a7334b5b5e49c48f0f14e0f19b3ec,
+    type: 3}
   TargetPrefab: {fileID: 2897101425122450674, guid: 48ed105f20b6e4d428694e451ce8781b,
     type: 3}
   RoutePanelPrefab: {fileID: 942238979325101098, guid: f26908b5969ec4f3fa7777c9d409995e,

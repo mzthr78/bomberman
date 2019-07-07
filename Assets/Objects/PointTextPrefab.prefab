@@ -13,8 +13,9 @@ GameObject:
   - component: {fileID: 2203507430306462506}
   - component: {fileID: 2203507430306462505}
   - component: {fileID: 2203507430306462548}
+  - component: {fileID: -6726148798990617896}
   m_Layer: 5
-  m_Name: Text
+  m_Name: PointPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -37,7 +38,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 160, y: 30}
+  m_SizeDelta: {x: 80, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2203507430306462507
 CanvasRenderer:
@@ -74,7 +75,7 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 10
     m_MaxSize: 40
-    m_Alignment: 2
+    m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
@@ -99,7 +100,7 @@ MonoBehaviour:
   delay: 0
   style: 1
   playOnAwake: 1
-  m_progress: 0.7738261
+  m_progress: 0.24018137
   usePosition: 1
   useRotation: 0
   useScale: 0
@@ -314,3 +315,15 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
   m_EffectDistance: {x: 1, y: -1}
   m_UseGraphicAlpha: 1
+--- !u!114 &-6726148798990617896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2203507430306462511}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 510148f2746ef4ab8820bdf37e59bbd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

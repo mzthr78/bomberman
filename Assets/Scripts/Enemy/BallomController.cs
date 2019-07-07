@@ -9,6 +9,8 @@ public class BallomController : MonoBehaviour
     GameController controller;
     RouteScript routeScript;
 
+    public GameObject PointTextPrefab;
+
     //public Transform player;
     Transform player;
 
@@ -447,6 +449,14 @@ public class BallomController : MonoBehaviour
     {
         if (other.tag == "Fire")
         {
+            Debug.Log("aaa");
+
+            GameObject PointText = Instantiate(PointTextPrefab);
+            PointText.transform.parent = GameObject.Find("Canvas").transform;
+            PointText.transform.position = RectTransformUtility.WorldToScreenPoint(Camera.main, transform.position);
+
+            Debug.Log("bbb");
+            
             Destroy(gameObject);
         }
     }
