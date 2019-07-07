@@ -2603,7 +2603,12 @@ PrefabInstance:
     - target: {fileID: 2203507430306462505, guid: d55a7334b5b5e49c48f0f14e0f19b3ec,
         type: 3}
       propertyPath: m_progress
-      value: 0.016817404
+      value: 0.24599496
+      objectReference: {fileID: 0}
+    - target: {fileID: 2203507430306462505, guid: d55a7334b5b5e49c48f0f14e0f19b3ec,
+        type: 3}
+      propertyPath: positionSeparation
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d55a7334b5b5e49c48f0f14e0f19b3ec, type: 3}
