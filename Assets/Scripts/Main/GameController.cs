@@ -71,6 +71,7 @@ public class GameController : MonoBehaviour
     // BGM/SSE
     public AudioClip StageClearSE;
     public AudioClip LosingLifeSE;
+	public AudioClip ExplosionSE;
 
     static int stageNum;
     static int[] PlayerStatusNumArr = { 0, 1, 1, 0, 0, 0, 0, 0, 0 };
@@ -79,13 +80,11 @@ public class GameController : MonoBehaviour
     static ViewPoint viewPoint;
 
     public int SoftBlockNum = 0;
-    public int maxStageNum = 50;
+    public int maxStageNum = 1;
 
     string ItemString = "012342213562235162523532358123762385731683653865378"; // Item(s) of Stage[0 .. 50]
 
     int[,] EnemiesOfStage = {
-      {1, 3, 0, 0, 0, 0, 0, 0 }, // Stage 01 ballom:6, onil:0, ...
-      {0, 1, 0, 0, 0, 0, 0, 0 }, // Stage 01 ballom:6, onil:0, ...
       {6, 0, 0, 0, 0, 0, 0, 0 }, // Stage 01 ballom:6, onil:0, ...
       {3, 3, 0, 0, 0, 0, 0, 0 }, // Stage 02 ballom:3, onil:3, ...
       {2, 2, 2, 0, 0, 0, 0, 0 }, // Stage 03 ballom:2, onil:2, daru:2, ...
@@ -283,6 +282,9 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
+
+
         RaycastHit hit;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out hit))
@@ -603,6 +605,11 @@ public class GameController : MonoBehaviour
         viewPoint = mainCamera.GetComponent<CameraController>().GetViewPoint();
     }
 
+    public void Death()
+	{
+		StageMiss();
+	}
+
     public void StageMiss()
     {
         Freeze();
@@ -663,4 +670,9 @@ public class GameController : MonoBehaviour
         PointText.GetComponent<PointTextController>().InitPointText(pos, point);
         score += point;
     }
+
+    public void PlayExplosionSE()
+	{
+		GetComponent<AudioSource>().PlayOneShot(ExplosionSE);
+	}
 }

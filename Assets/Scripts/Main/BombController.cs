@@ -40,6 +40,9 @@ public class BombController : MonoBehaviour
 
     IEnumerator Explosion()
     {
+        //GetComponent<AudioSource>().PlayOneShot(ExplosionSE);
+        controller.PlayExplosionSE();
+
         explosion = true;
 
         GameObject Fire;

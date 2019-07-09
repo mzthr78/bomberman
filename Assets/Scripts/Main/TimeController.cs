@@ -5,8 +5,10 @@ using UnityEngine.UI;
 
 public class TimeController : MonoBehaviour
 {
+    GameController controller;
+
     Text timeText;
-    float time = 200;
+    public float time = 200;
 
     bool freeze = false;
 
@@ -18,13 +20,23 @@ public class TimeController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        controller = GameObject.Find("GameController").GetComponent<GameController>();
         timeText = GetComponent<Text>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (time > 0) time -= Time.deltaTime;
+        if (controller.IsFreeze()) return;
+
+        if (time > 0)
+        {
+            time -= Time.deltaTime;
+        }
+        else
+        {
+            controller.Death();
+        }
         timeText.text = Mathf.RoundToInt(time).ToString();
     }
 }

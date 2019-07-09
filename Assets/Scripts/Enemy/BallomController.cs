@@ -4,262 +4,116 @@ using UnityEngine;
 
 public class BallomController : MonoBehaviour
 {
-    //public GameObject GameController;
-    GameObject GameController;
     GameController controller;
-    RouteScript routeScript;
 
-    //public Transform player;
-    Transform player;
+    private readonly int[] dx = { 1, 0, -1, 0 };
+    private readonly int[] dz = { 0, -1, 0, 1 };
+    private readonly float speed = 0.02f;
+    private Direction currDir = Direction.None;
 
-    public GameObject TargetPrefab;
-    public GameObject RoutePanelPrefab;
-    
-    private GameObject TargetObj1;
-    private GameObject TargetObj2;
-    private int targetNum = 0;
-
-    int stageWidth = 0;
-    int stageHeight = 0;
-
-    private void Awake()
+    // Start is called before the first frame update
+    void Start()
     {
-        //Find Object (for Prefab)
-        GameController = GameObject.Find("GameController");
-        player = GameObject.Find("Player").transform;
-        
-        controller = GameController.GetComponent<GameController>();
+        ChangeDirection();
+        //StartCoroutine(Whim());
 
-        TargetObj1 = Instantiate(TargetPrefab, transform.position, Quaternion.identity);
-        TargetObj1.transform.parent = GameObject.Find("Target").transform;
-        //TargetObj1.GetComponent<Renderer>().material.color = Color.blue;
-
-        TargetObj2 = Instantiate(TargetPrefab, transform.position, Quaternion.identity);
-        TargetObj2.transform.parent = GameObject.Find("Target").transform;
-        //TargetObj2.GetComponent<Renderer>().material.color = Color.red;
-
-        routeScript = gameObject.GetComponent<RouteScript>();
-
-        //Debug.Log("routeScript" + routeScript.ToString());
+        controller = GameObject.Find("GameController").GetComponent<GameController>();
     }
 
-    Vector3 startPos;
-    Vector3 markerPos;
-
-    float posY = 0;
-
-    bool freeze = false;
-    float speed = 0.033f;
-
-    Queue<Addr> queRoute;
-
-    public void Freeze(bool b = true)
+    // Update is called once per frame
+    void Update()
     {
-        this.freeze = b;
-    }
-
-    public void UnFreeze()
-    {
-        Freeze(false);
-    }
-
-    int fuga = 0;
-
-    void Hoge()
-    {
-        Hoge(fuga);
-        fuga++;
-    }
-
-    void Hoge(int n)
-    {
-        Debug.Log("hoge " + n);
-    }
-
-    private void Start()
-    {
-        posY = transform.position.y;
-        markerPos = transform.position;
-
-        queRoute = new Queue<Addr>();
-
-        stageWidth = controller.GetStageWidth();
-        stageHeight = controller.GetStageHeight();
-
-        freeze = false;
-
-        //Wander();
-        // 初期の目的地[0]を設定
-        List<Addr> route = new List<Addr>();
-        route = routeScript.GetDeadEndOne(controller.Pos2Addr(transform.position));
-
-        for (int i = 0; i < route.Count; i++)
-        {
-            queRoute.Enqueue(route[i]);
-        }
-        TargetObj1.transform.position = controller.Addr2Pos(route[route.Count - 1]);
-
-        // 初期の目的地[1]を設定
-        route = new List<Addr>();
-        route = routeScript.GetDeadEndOne(controller.Pos2Addr(transform.position));
-        TargetObj2.transform.position = controller.Addr2Pos(route[route.Count - 1]);
-
-        int count = 0;
-        while (TargetObj1.transform.position == TargetObj2.transform.position && count < 1000)
-        {
-            route = new List<Addr>();
-            route = routeScript.GetDeadEndOne(controller.Pos2Addr(transform.position));
-            TargetObj2.transform.position = controller.Addr2Pos(route[route.Count - 1]);
-            count++;
-        }
-
-        //Debug.Log("target1 " + TargetObj1.transform.position);
-        //Debug.Log("target2 " + TargetObj2.transform.position);
-    }
-
-    private void ChangeTarget(GameObject obj)
-    {
-        Addr start = controller.Pos2Addr(transform.position);
-        List<Addr> route = routeScript.GetDeadEndOne(start);
-        obj.transform.position = controller.Addr2Pos(route[route.Count - 1]);
-    }
-
-    float span = 2;
-    float delta = 0;
-
-    private void Update()
-    {
-        if (freeze) return;
-
-        delta += Time.deltaTime;
-
-        if (delta > 2)
-        {
-            delta = 0;
-
-            if (Random.Range(0, 10) < 1)
-            {
-                ChangeTarget(TargetObj1);
-            }
-
-            if (Random.Range(0, 10) < 1)
-            {
-                ChangeTarget(TargetObj2);
-            }
-        }
+        if (controller.IsFreeze()) return;
 
         RaycastHit hit;
-		if (Physics.Raycast(transform.position, transform.forward, out hit, 1.0f))
-		{
-			if (hit.transform.tag == "Bomb")
-			{
-                Debug.Log("bomb?");
-                markerPos = transform.position;
-                ChangeTarget(TargetObj1);
-                ChangeTarget(TargetObj2);
-                FlipTarget();
-            }
-        }
-
-		float distance = Vector3.Distance(transform.position, markerPos);
-
-        if (distance < 0.05)
+        Vector3 dirPos = new Vector3(dx[(int)currDir], 0, dz[(int)currDir]);
+        if (Physics.Raycast(transform.position, dirPos, out hit, 0.3f))
         {
-            if (queRoute.Count > 0)
+            switch (hit.transform.tag)
             {
-                Addr tmp = queRoute.Dequeue();
-
-                markerPos = new Vector3(tmp.x - 15, posY, 6 - tmp.z);
+                case "Player":
+                    break;
+                case "Enemy":
+                case "Fire":
+                    break;
+                default:
+                    currDir = Direction.None;
+                    ChangeDirection();
+                    break;
             }
-            else
+        }
+
+        /*
+        if (!Physics.Raycast(transform.position, transform.right, out hit, 1))
+        {
+            Debug.Log("right!");
+        }
+
+        if (!Physics.Raycast(transform.position, transform.right * -1, out hit, 1))
+        {
+            Debug.Log("left!");
+        }
+        */
+
+        transform.position += transform.forward * speed;
+
+    }
+
+    void ChangeDirection()
+    {
+        int counter = 0;
+        while (counter < 10)
+        {
+            Debug.Log("count=" + counter);
+
+            int dir = Random.Range(0, 4);
+
+            RaycastHit hit;
+            Vector3 dirPos = new Vector3(dx[dir], 0, dz[dir]);
+            if (Physics.Raycast(transform.position, dirPos, out hit, 30))
             {
-                StartCoroutine(Robe());
+                float distance = Vector3.Distance(transform.position, hit.transform.position);
+                if (distance > 1.2f)
+                {
+                    currDir = (Direction)dir;
+                    Toward((Direction)dir);
+                    break;
+                }
+            }
+            counter++;
+        }
+    }
 
-                //Addr tmp = queRoute.Dequeue();
-                //markerPos = new Vector3(tmp.x - 15, posY, 6 - tmp.z);
-                FlipTarget();
+    // きまぐれ（とりあえずボツ）
+    IEnumerator Whim()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(1);
+
+            float rx = Mathf.Round(transform.position.x);
+            float ry = Mathf.Round(transform.position.y);
+            float rz = Mathf.Round(transform.position.z);
+
+            Vector3 rp = new Vector3(rx, ry, rz);
+
+            if (Vector3.Distance(transform.position, rp) < 0.05)
+            {
+                Debug.Log("pos=" + transform.position);
+                //ChangeDirection();
             }
         }
-        else
-        {
-            Toward(markerPos);
-        }
     }
 
-    private void FlipTarget()
+    IEnumerator Sleep(float sec)
     {
-        if (targetNum == 0) targetNum = 1;
-        else targetNum = 0;
-
-        Addr start = controller.Pos2Addr(transform.position);
-        Addr goal;
-
-        if (targetNum == 0)
-        {
-            goal = controller.Pos2Addr(TargetObj1.transform.position);
-        }
-        else
-        {
-            goal = controller.Pos2Addr(TargetObj2.transform.position);
-        }
-
-        List<Addr> route = routeScript.GetShortestRoute(start, goal);
-
-        queRoute.Clear();
-        for (int i = 0; i < route.Count; i++)
-        {
-            queRoute.Enqueue(route[i]);
-        }
+        Debug.Log("Zzz...");
+        yield return new WaitForSeconds(sec);
     }
 
-    bool IsEmpty(BMObj obj)
+    void Toward(Direction dir)
     {
-        switch (obj)
-        {
-            case BMObj.HardBlock:
-            case BMObj.SoftBlock:
-            case BMObj.Bomb:
-                return false;
-            default:
-                return true;
-        }
-    }
-
-    // キョロキョロ
-    IEnumerator Robe()
-    {
-        ChangeDirection(Direction.Down);
-
-        float waitsec = Random.Range(0, 40) * 0.1f + 0.2f;
-
-        yield return new WaitForSeconds(waitsec);
-    }
-
-    Direction PreDir = Direction.None;
-
-    void Toward(Vector3 pos)
-    {
-        Direction d = Direction.None;
-
-        Vector3 sub = transform.position - pos;
-
-        if (Mathf.Abs(sub.x) > 0.1f)
-        {
-            if (sub.x > 0) d = Direction.Left;
-            else d = Direction.Right;
-        }
-        else if (Mathf.Abs(sub.z) > 0.1f)
-        {
-            if (sub.z > 0) d = Direction.Down;
-            else d = Direction.Up;
-        }
-
-        Move(d);
-    }
-
-    void ChangeDirection(Direction d)
-    {
-        switch (d)
+        switch (dir)
         {
             case Direction.Right:
                 transform.rotation = Quaternion.Euler(0, 90, 0);
@@ -278,57 +132,13 @@ public class BallomController : MonoBehaviour
         }
     }
 
-    void Move(Direction d)
-    {
-        ChangeDirection(d);
-
-        transform.position += transform.forward * speed;
-        //transform.Translate(transform.forward * 0.01f); // これだとダメ
-    }
-
-    bool IsObstruct(BMObj bo)
-    {
-        switch (bo)
-        {
-            case BMObj.HardBlock:
-            case BMObj.SoftBlock:
-            case BMObj.Bomb:
-                return true;
-            default:
-                return false;
-        }
-    }
-
-    bool IsObstruct(string s)
-    {
-        switch (s)
-        {
-            case "HardBlock":
-            case "SoftBlock":
-            case "Bomb":
-                return true;
-            default:
-                return false;
-        }
-    }
-
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log("trigger enter?");
         if (other.tag == "Fire")
         {
             controller.GetPoint(transform.position, 100);
-
             Destroy(gameObject);
         }
     }
-
-    /*
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.transform.tag == "Fire")
-        {
-            Destroy(gameObject);
-        }
-    }
-    */
 }

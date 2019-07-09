@@ -62,7 +62,7 @@ public class SoftBlockController : MonoBehaviour
         {
             if (GameObject.FindGameObjectsWithTag("Door").Length == 0)
             {
-                GameObject Door = Instantiate(DoorPrefab, transform.position, Quaternion.Euler(10, 180, 0));
+                GameObject Door = Instantiate(DoorPrefab, transform.position, Quaternion.Euler(80, 0, 0));
             }
             controller.SetObj(transform.position, BMObj.Door);
         }

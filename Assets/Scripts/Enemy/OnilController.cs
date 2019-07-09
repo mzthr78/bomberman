@@ -45,6 +45,7 @@ public class OnilController : MonoBehaviour
             switch (hit.transform.tag)
             {
                 case "Enemy":
+                case "Fire":
                     break;
                 case "Player":
                     // ここに追いかける処理を追加
@@ -134,10 +135,8 @@ public class OnilController : MonoBehaviour
             float rz = Mathf.Round(transform.position.z);
             Vector3 rp = new Vector3(rx, ry, rz);
 
-            Debug.Log("aaa");
             if (Vector3.Distance(transform.position, rp) < 0.4)
             {
-                Debug.Log("bbb");
                 ChangeDirection();
             }
 

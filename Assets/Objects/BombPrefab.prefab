@@ -107,7 +107,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FirePrefab: {fileID: 6594159080632994088, guid: 2c300f46d6e804c58b1b09560ff7de74,
     type: 3}
-  ExplosionSE: {fileID: 8300000, guid: 3495ff9f530360a41b88bdefc93415af, type: 3}
+  ExplosionSE: {fileID: 8300000, guid: ac974472f006143fe834fa4f5d80ad2d, type: 3}
 --- !u!82 &2909400977411839476
 AudioSource:
   m_ObjectHideFlags: 0
@@ -119,7 +119,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
