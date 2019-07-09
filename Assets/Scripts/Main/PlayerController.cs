@@ -60,7 +60,7 @@ public class PlayerController : MonoBehaviour
         if (controller.IsFreeze()) return;
 
 		string platform = Application.platform.ToString();
-		Debug.Log("platform=" + platform);
+		//Debug.Log("platform=" + platform);
 
 		switch (platform)
 		{

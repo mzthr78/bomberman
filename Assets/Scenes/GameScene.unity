@@ -864,8 +864,8 @@ MonoBehaviour:
   LosingLifeSE: {fileID: 8300000, guid: 501f8f5fda6674fdb9a41c3950324438, type: 3}
   ExplosionSE: {fileID: 8300000, guid: 49df5f6aa1c5040cca3511dca711f486, type: 3}
   playerRemainInit: 2
-  SoftBlockNum: 20
-  maxStageNum: 1
+  SoftBlockNum: 50
+  maxStageNum: 2
   BallomPrefab: {fileID: 627789666318875974, guid: c8ab5f99e2b2d414aa65ab52049871e5,
     type: 3}
   OnilPrefab: {fileID: 2713012070168738200, guid: 26a353b46ed5c40d18b6e9f9edfd8296,

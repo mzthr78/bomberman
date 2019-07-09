@@ -16,6 +16,7 @@ public enum Direction
 public class OnilController : MonoBehaviour
 {
     GameController controller;
+    RouteScript routeScript;
 
     bool freeze = false;
 
@@ -31,6 +32,7 @@ public class OnilController : MonoBehaviour
         StartCoroutine(Whim());
 
         controller = GameObject.Find("GameController").GetComponent<GameController>();
+        routeScript = GetComponent<RouteScript>();
     }
 
     // Update is called once per frame
@@ -38,6 +40,7 @@ public class OnilController : MonoBehaviour
     {
         if (controller.IsFreeze()) return;
 
+        /*
         RaycastHit hit;
         Vector3 dirPos = new Vector3(dx[(int)currDir], 0, dz[(int)currDir]);
         if (Physics.Raycast(transform.position, dirPos, out hit, 0.4f))
@@ -48,49 +51,114 @@ public class OnilController : MonoBehaviour
                 case "Fire":
                     break;
                 case "Player":
-                    // ここに追いかける処理を追加
                     break;
                 default:
                     ChangeDirection();
                     break;
             }
         }
+        */
 
-        float rx = Mathf.Round(transform.position.x);
-        float ry = Mathf.Round(transform.position.y);
-        float rz = Mathf.Round(transform.position.z);
+        bool findPlayer = false;
+
+        RaycastHit hit;
+        bool findRight = false;
+
+        float rx = 0;
+        float ry = transform.position.y;
+        float rz = 0;
+
+        switch (currDir)
+        {
+            case Direction.Right:
+            case Direction.Left:
+                rx = Mathf.Round(transform.position.x);
+                rz = transform.position.z;
+                break;
+            case Direction.Up:
+            case Direction.Down:
+                rx = transform.position.x;
+                rz = Mathf.Round(transform.position.z);
+                break;
+            default:
+                break;
+        }
 
         Vector3 rp = new Vector3(rx, ry, rz);
 
-        if (Vector3.Distance(transform.position, rp) < 0.05)
+        if (Vector3.Distance(transform.position, rp) < 0.1f)
         {
-            //Debug.Log("pos=" + transform.position);
-
-            if (!Physics.Raycast(transform.position, transform.right, out hit, 1))
+            if (Physics.Raycast(transform.position, transform.right, out hit, 31.0f) && hit.transform.tag == "Player")
             {
-                //Debug.Log("right!");
+                findPlayer = true;
+                findRight = true;
             }
-
-            if (!Physics.Raycast(transform.position, transform.right * -1, out hit, 1))
+            else if (Physics.Raycast(transform.position, transform.right * -1, out hit, 31.0f) && hit.transform.tag == "Player")
             {
-                //Debug.Log("left!");
+                findPlayer = true;
             }
         }
 
-        /*
-        if (!Physics.Raycast(transform.position, transform.right, out hit, 1))
+        if (findPlayer)
         {
-            Debug.Log("right!");
+            if (findRight)
+            {
+                switch (currDir)
+                {
+                    case Direction.Right:
+                        currDir = Direction.Down;
+                        break;
+                    case Direction.Down:
+                        currDir = Direction.Left;
+                        break;
+                    case Direction.Left:
+                        currDir = Direction.Up;
+                        break;
+                    case Direction.Up:
+                        currDir = Direction.Right;
+                        break;
+                }
+            }
+            else
+            {
+                switch (currDir)
+                {
+                    case Direction.Right:
+                        currDir = Direction.Up;
+                        break;
+                    case Direction.Down:
+                        currDir = Direction.Left;
+                        break;
+                    case Direction.Left:
+                        currDir = Direction.Down;
+                        break;
+                    case Direction.Up:
+                        currDir = Direction.Left;
+                        break;
+                }
+            }
+            Toward(currDir);
         }
-
-        if (!Physics.Raycast(transform.position, transform.right * -1, out hit, 1))
+        else
         {
-            Debug.Log("left!");
+            Vector3 dirPos = new Vector3(dx[(int)currDir], 0, dz[(int)currDir]);
+            if (Physics.Raycast(transform.position, dirPos, out hit, 0.4f))
+            {
+                switch (hit.transform.tag)
+                {
+                    case "Enemy":
+                    case "Fire":
+                        break;
+                    case "Player":
+                        break;
+                    default:
+                        ChangeDirection();
+                        break;
+                }
+            }
         }
-        */
 
         transform.position += transform.forward * speed;
-
     }
 
     void ChangeDirection()
