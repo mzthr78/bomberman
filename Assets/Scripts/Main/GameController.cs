@@ -59,28 +59,34 @@ public class GameController : MonoBehaviour
 {
     bool isDebug = true;
 
+    bool freeze = false;
+
     public GameObject stage;
     public GameObject mainCamera;
     public GameObject player;
     PlayerController pcon;
 
     public Text MousePosition;
-    public Text InfoText;
 
+    // BGM/SSE
     public AudioClip StageClearSE;
+    public AudioClip LosingLifeSE;
 
     static int stageNum;
     static int[] PlayerStatusNumArr = { 0, 1, 1, 0, 0, 0, 0, 0, 0 };
+    public int playerRemainInit = 2;
+    static int playerRemain = 0;
     static ViewPoint viewPoint;
 
     public int SoftBlockNum = 0;
-    int maxStage = 50;
+    public int maxStageNum = 50;
 
     string ItemString = "012342213562235162523532358123762385731683653865378"; // Item(s) of Stage[0 .. 50]
 
     int[,] EnemiesOfStage = {
-      //{6, 0, 0, 0, 0, 0, 0, 0 }, // Stage 01 ballom:6, onil:0, ...
-      {3, 3, 0, 0, 0, 0, 0, 0 }, // Stage 01 ballom:6, onil:0, ...
+      {1, 3, 0, 0, 0, 0, 0, 0 }, // Stage 01 ballom:6, onil:0, ...
+      {0, 1, 0, 0, 0, 0, 0, 0 }, // Stage 01 ballom:6, onil:0, ...
+      {6, 0, 0, 0, 0, 0, 0, 0 }, // Stage 01 ballom:6, onil:0, ...
       {3, 3, 0, 0, 0, 0, 0, 0 }, // Stage 02 ballom:3, onil:3, ...
       {2, 2, 2, 0, 0, 0, 0, 0 }, // Stage 03 ballom:2, onil:2, daru:2, ...
       {1, 1, 2, 2, 0, 0, 0, 0 }, // Stage 04
@@ -96,6 +102,12 @@ public class GameController : MonoBehaviour
     public GameObject ObapiPrefab;
     public GameObject PassPrefab;
     public GameObject PontanPrefab;
+
+    // Point / Score
+    public GameObject PointTextPrefab;
+    public Text ScoreText;
+    static int score;
+    public Text PlayerRemainText;
 
     List<List<BMObj>> map = new List<List<BMObj>>();
 
@@ -114,11 +126,17 @@ public class GameController : MonoBehaviour
     public static void PlayerInit()
     {
         PlayerStatusNumArr = new int[9] { 0, 1, 1, 0, 0, 0, 0, 0, 0 };
+        playerRemain = 2;
     }
 
     public static void SetStageNum(int num)
     {
         stageNum = num;
+    }
+
+    public static void InitScore()
+    {
+        score = 0;
     }
 
     public static ViewPoint GetViewPoint()
@@ -178,9 +196,28 @@ public class GameController : MonoBehaviour
         return new Vector3(addr.x - 15, 0, 6 - addr.z);
     }
 
+    public void Freeze(bool b = true)
+    {
+        this.freeze = b;
+    }
+
+    public void UnFreeze()
+    {
+        Freeze(false);
+    }
+
+    public bool IsFreeze()
+    {
+        return this.freeze;
+    }
+
     private void Awake()
     {
-        if (stageNum == 0) stageNum = 1;
+        if (stageNum == 0)
+        {
+            stageNum = 1;
+            playerRemain = playerRemainInit;
+        }
 
         float posX = ((stage.transform.localScale.x * 10 - 1) / 2) * -1 + 1;
         float posZ = ((stage.transform.localScale.z * 10 - 1) / 2) - 1;
@@ -189,6 +226,8 @@ public class GameController : MonoBehaviour
         player.transform.position = new Vector3(posX, 0, posZ);
 
         aud = GetComponent<AudioSource>();
+
+        this.freeze = false;
 	}
 
 	void Start()
@@ -238,6 +277,7 @@ public class GameController : MonoBehaviour
 		}
         */
 
+        PlayerRemainText.text = playerRemain.ToString();
     }
 
     // Update is called once per frame
@@ -252,28 +292,18 @@ public class GameController : MonoBehaviour
             if (Input.GetMouseButtonDown(0))
             {
                 Debug.Log(GetObj(new Vector3(Mathf.Round(hit.point.x), hit.point.y, Mathf.Round(hit.point.z))) + "(" + Mathf.Round(hit.point.x) + ", " + Mathf.Round(hit.point.z) + ")");
+
+                GameObject Ballom = Instantiate(BallomPrefab, new Vector3(hit.point.x, 0, hit.point.z), Quaternion.identity);
+                Ballom.transform.parent = GameObject.Find("Ballom").transform;
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.X))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            SceneManager.LoadScene("ClearScene");
-        }
-        else if (Input.GetKeyDown(KeyCode.Z))
-        {
-            SceneManager.LoadScene("GameOverScene");
+            this.freeze = !this.freeze;
         }
 
-        Info();
-    }
-
-    public void Info()
-    {
-        string tmp = "";
-
-        tmp += "ViewPoint = " + viewPoint + "\n";
-
-        InfoText.text = tmp;
+        ScoreText.text = score.ToString();
     }
 
     public BMObj GetObj(Vector3 pos)
@@ -573,10 +603,36 @@ public class GameController : MonoBehaviour
         viewPoint = mainCamera.GetComponent<CameraController>().GetViewPoint();
     }
 
+    public void StageMiss()
+    {
+        Freeze();
+        playerRemain--;
+        StartCoroutine(StageMissProc());
+    }
+
     public void StageClear()
     {
+        Freeze();
         SaveGlovbalSettings();
         StartCoroutine(StageClearProc());
+    }
+
+    IEnumerator StageMissProc()
+    {
+        aud.Stop();
+        aud.PlayOneShot(LosingLifeSE);
+
+        yield return new WaitForSeconds(3.5f);
+
+        stageNum--;
+        if (playerRemain >= 0)
+        {
+            SceneManager.LoadScene("LoadScene");
+        }
+        else
+        {
+            SceneManager.LoadScene("GameOverScene");
+        }
     }
 
     IEnumerator StageClearProc()
@@ -586,6 +642,25 @@ public class GameController : MonoBehaviour
 
         yield return new WaitForSeconds(3.5f);
 
-        SceneManager.LoadScene("LoadScene");
+        Debug.Log("stageNum+1=" + (stageNum + 1));
+        Debug.Log("maxStage=" + maxStageNum);
+
+        if (stageNum + 1 <= maxStageNum)
+        {
+            SceneManager.LoadScene("LoadScene");
+        }
+        else
+        {
+            SceneManager.LoadScene("GameClearScene");
+        }
+    }
+
+    public void GetPoint(Vector3 pos, int point)
+    {
+        GameObject PointText = Instantiate(PointTextPrefab);
+        PointText.transform.parent = GameObject.Find("Canvas").transform;
+        PointText.transform.position = RectTransformUtility.WorldToScreenPoint(Camera.main, pos);
+        PointText.GetComponent<PointTextController>().InitPointText(pos, point);
+        score += point;
     }
 }

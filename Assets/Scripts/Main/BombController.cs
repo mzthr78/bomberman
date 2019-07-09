@@ -27,6 +27,8 @@ public class BombController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (controller.IsFreeze()) return;
+
         delta += Time.deltaTime;
 
         if (delta > span)

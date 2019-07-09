@@ -31,6 +31,7 @@ public class SoftBlockController : MonoBehaviour
         this.isItem = b;
     }
 
+    /*
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.transform.tag == "Fire")
@@ -38,6 +39,7 @@ public class SoftBlockController : MonoBehaviour
             Destroy(gameObject);
         }
     }
+    */
 
     private void OnTriggerEnter(Collider other)
     {

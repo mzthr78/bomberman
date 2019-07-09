@@ -27,6 +27,8 @@ public class FireController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        controller = GameObject.Find("GameController").GetComponent<GameController>();
+
         startTime = Time.time;
         journeyLength = Vector3.Distance(transform.position, (transform.position + power));
 
@@ -42,6 +44,8 @@ public class FireController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (controller.IsFreeze()) return;
+
         delta += Time.deltaTime;
 
         if (delta > span)

@@ -8,6 +8,13 @@ public class TimeController : MonoBehaviour
     Text timeText;
     float time = 200;
 
+    bool freeze = false;
+
+    public void Freeze(bool b = true)
+    {
+        this.freeze = b;
+    }
+
     // Start is called before the first frame update
     void Start()
     {

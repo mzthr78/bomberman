@@ -17,6 +17,8 @@ public class ItemController : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
+            controller.GetPoint(transform.position, 1000);
+
             StartCoroutine(PowerUp((PowerUpItem)controller.GetItemPerStage()));
             /*
             switch (tag)

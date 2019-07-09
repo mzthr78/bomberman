@@ -7,8 +7,8 @@ public enum ViewPoint
 {
     Right = 0,　// 真上
     Diagonally = 1, // 斜め上
-    TPP = 2,
-    FPP = 3,
+    //TPP = 2,
+    //FPP = 3,
 }
 
 public class CameraController : MonoBehaviour
@@ -17,8 +17,6 @@ public class CameraController : MonoBehaviour
     Vector3 offset;
     float posY;
     float posZ;
-
-    public Text debugtext;
 
     ViewPoint vp;
 
@@ -38,8 +36,6 @@ public class CameraController : MonoBehaviour
             if (vptmp > System.Enum.GetValues(typeof(ViewPoint)).Length - 1) vptmp = 0;
             vp = (ViewPoint)vptmp;
             InitCameraPosition(vp);
-
-            debugtext.text = vp.ToString();
         }
 
         Vector3 tmp = target.position + offset;
@@ -48,10 +44,12 @@ public class CameraController : MonoBehaviour
             case ViewPoint.Right:
                 transform.position = new Vector3(tmp.x, tmp.y, posZ); // Diagonally
                 break;
+            /*
             case ViewPoint.TPP:
                 transform.position = tmp; // Diagonally
                 transform.LookAt(target);
                 break;
+            */
             default:
                 transform.position = tmp;
                 break;
@@ -72,6 +70,7 @@ public class CameraController : MonoBehaviour
                 offset = new Vector3(0, 5.5f, -5f) - new Vector3(0, 0, 0);
                 transform.rotation = Quaternion.Euler(50, 0, 0);
                 break;
+            /*
             case ViewPoint.TPP:
                 offset = new Vector3(0, 3f, 3f) - new Vector3(0, 0, 0);
                 //transform.rotation = Quaternion.Euler(45, 180, 0);
@@ -80,6 +79,7 @@ public class CameraController : MonoBehaviour
                 offset = new Vector3(0, 5.5f, -6f) - new Vector3(0, 0, 0);
                 transform.rotation = Quaternion.Euler(50, 0, 0);
                 break;
+            */
             default: //case ViewPoint.Right:
                 offset = new Vector3(0, 11.5f, 0.5f) - new Vector3(0, 0, 0);
                 transform.rotation = Quaternion.Euler(90, 0, 0);

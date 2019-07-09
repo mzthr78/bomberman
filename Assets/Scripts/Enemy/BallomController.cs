@@ -9,8 +9,6 @@ public class BallomController : MonoBehaviour
     GameController controller;
     RouteScript routeScript;
 
-    public GameObject PointTextPrefab;
-
     //public Transform player;
     Transform player;
 
@@ -150,7 +148,20 @@ public class BallomController : MonoBehaviour
             }
         }
 
-        float distance = Vector3.Distance(transform.position, markerPos);
+        RaycastHit hit;
+		if (Physics.Raycast(transform.position, transform.forward, out hit, 1.0f))
+		{
+			if (hit.transform.tag == "Bomb")
+			{
+                Debug.Log("bomb?");
+                markerPos = transform.position;
+                ChangeTarget(TargetObj1);
+                ChangeTarget(TargetObj2);
+                FlipTarget();
+            }
+        }
+
+		float distance = Vector3.Distance(transform.position, markerPos);
 
         if (distance < 0.05)
         {
@@ -226,138 +237,6 @@ public class BallomController : MonoBehaviour
 
     Direction PreDir = Direction.None;
 
-    // ウロウロ
-    private void Wander_BOTSU()
-    {
-        if (queRoute.Count > 0) queRoute.Clear();
-
-        /*
-        queTarget.Enqueue(new Addr(17, 5));
-        queTarget.Enqueue(new Addr(17, 4));
-        queTarget.Enqueue(new Addr(17, 3));
-        queTarget.Enqueue(new Addr(17, 2));
-        queTarget.Enqueue(new Addr(17, 1));
-        queTarget.Enqueue(new Addr(17, 2));
-        queTarget.Enqueue(new Addr(17, 3));
-        queTarget.Enqueue(new Addr(17, 4));
-        queTarget.Enqueue(new Addr(17, 5));
-        queTarget.Enqueue(new Addr(17, 6));
-        queTarget.Enqueue(new Addr(17, 7));
-        */
-
-        List<Direction> SearchDir = new List<Direction>();
-        int[] dx = { 0, 0, 0, 0 };
-        int[] dz = { 0, 0, 0, 0 };
-
-        switch (PreDir)
-        {
-            case Direction.Left:
-                SearchDir.Add(Direction.Right);
-                SearchDir.Add(Direction.Left);
-                SearchDir.Add(Direction.Up);
-                SearchDir.Add(Direction.Down);
-
-                int[] dx_right = { 1, -1, 0, 0 };
-                int[] dz_right = { 0, 0, 1, -1 };
-
-                dx = dx_right;
-                dz = dz_right;
-
-                break;
-            case Direction.Up:
-                SearchDir.Add(Direction.Down);
-                SearchDir.Add(Direction.Up);
-                SearchDir.Add(Direction.Left);
-                SearchDir.Add(Direction.Right);
-
-                int[] dx_down = { 0, 0, -1, 1 };
-                int[] dz_down = { -1, 1, 0, 0 };
-
-                dx = dx_down;
-                dz = dz_down;
-
-                break;
-            case Direction.Down:
-                SearchDir.Add(Direction.Up);
-                SearchDir.Add(Direction.Down);
-                SearchDir.Add(Direction.Left);
-                SearchDir.Add(Direction.Right);
-
-                int[] dx_up = { 0, 0, -1, 1 };
-                int[] dz_up = { 1, -1, 0, 0 };
-
-                dx = dx_up;
-                dz = dz_up;
-
-                break;
-            default:
-                SearchDir.Add(Direction.Left);
-                SearchDir.Add(Direction.Right);
-                SearchDir.Add(Direction.Up);
-                SearchDir.Add(Direction.Down);
-
-                int[] dx_left = { -1, 1, 0, 0 };
-                int[] dz_left = { 0, 0, 1, -1 };
-
-                dx = dx_left;
-                dz = dz_left;
-
-                break;
-        }
-
-        Direction SeekDir = Direction.None;
-
-        BMObj obj;
-        for (int i = 0; i < 4; i++)
-        {
-            Vector3 pos = transform.position + new Vector3(dx[i], transform.position.y, dz[i]);
-            obj = controller.GetObj(pos);
-
-            switch (obj)
-            {
-                case BMObj.HardBlock:
-                case BMObj.SoftBlock:
-                    break;
-                default:
-                    SeekDir = SearchDir[i];
-                    PreDir = SeekDir;
-                    break;
-            }
-
-            if (SeekDir != Direction.None) break;
-        }
-
-        int[] dx_tmp = { 1, 0, -1, 0 };
-        int[] dz_tmp = { 0, -1, 0, 1 };
-
-        dx = dx_tmp;
-        dz = dz_tmp;
-
-        ChangeDirection(SeekDir);
-
-        bool isEmpty = true;
-
-        Vector3 prePos = transform.position + new Vector3(dx[(int)SeekDir], transform.position.y, dz[(int)SeekDir]);
-        while (isEmpty)
-        {
-            Vector3 pos = prePos + new Vector3(dx[(int)SeekDir], prePos.y, dz[(int)SeekDir]);
-            obj = controller.GetObj(pos);
-
-            switch (obj)
-            {
-                case BMObj.HardBlock:
-                case BMObj.SoftBlock:
-                    isEmpty = false;
-                    break;
-                default:
-                    prePos = pos;
-                    break;
-            }
-        }
-
-        queRoute.Enqueue(controller.Pos2Addr(prePos));
-    }
-
     void Toward(Vector3 pos)
     {
         Direction d = Direction.None;
@@ -403,18 +282,6 @@ public class BallomController : MonoBehaviour
     {
         ChangeDirection(d);
 
-        // ここだとダメ。
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.forward, out hit, 1))
-        {
-            if (IsObstruct(hit.transform.tag))
-            {
-                //Debug.Log("enemy hit " + hit.transform.tag);
-
-                //queTarget.Clear();
-            }
-        }
-
         transform.position += transform.forward * speed;
         //transform.Translate(transform.forward * 0.01f); // これだとダメ
     }
@@ -449,18 +316,13 @@ public class BallomController : MonoBehaviour
     {
         if (other.tag == "Fire")
         {
-            Debug.Log("aaa");
+            controller.GetPoint(transform.position, 100);
 
-            GameObject PointText = Instantiate(PointTextPrefab);
-            PointText.transform.parent = GameObject.Find("Canvas").transform;
-            PointText.transform.position = RectTransformUtility.WorldToScreenPoint(Camera.main, transform.position);
-
-            Debug.Log("bbb");
-            
             Destroy(gameObject);
         }
     }
 
+    /*
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.transform.tag == "Fire")
@@ -468,4 +330,5 @@ public class BallomController : MonoBehaviour
             Destroy(gameObject);
         }
     }
+    */
 }

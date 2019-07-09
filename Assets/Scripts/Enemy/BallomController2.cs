@@ -2,33 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/*
-public enum Direction
-{
-    None = -1,
-    Right = 0,
-    Down = 1,
-    Left = 2,
-    Up = 3,
-}
-*/
-
-public class OnilController : MonoBehaviour
+public class BallomController2 : MonoBehaviour
 {
     GameController controller;
 
-    bool freeze = false;
-
     private readonly int[] dx = { 1, 0, -1, 0 };
     private readonly int[] dz = { 0, -1, 0, 1 };
-    private readonly float speed = 0.04f;
+    private readonly float speed = 0.02f;
     private Direction currDir = Direction.None;
 
     // Start is called before the first frame update
     void Start()
     {
         ChangeDirection();
-        StartCoroutine(Whim());
+        //StartCoroutine(Whim());
 
         controller = GameObject.Find("GameController").GetComponent<GameController>();
     }
@@ -40,39 +27,12 @@ public class OnilController : MonoBehaviour
 
         RaycastHit hit;
         Vector3 dirPos = new Vector3(dx[(int)currDir], 0, dz[(int)currDir]);
-        if (Physics.Raycast(transform.position, dirPos, out hit, 0.4f))
+        if (Physics.Raycast(transform.position, dirPos, out hit, 0.3f))
         {
-            switch (hit.transform.tag)
+            if (hit.transform.tag != "Player")
             {
-                case "Enemy":
-                    break;
-                case "Player":
-                    // ここに追いかける処理を追加
-                    break;
-                default:
-                    ChangeDirection();
-                    break;
-            }
-        }
-
-        float rx = Mathf.Round(transform.position.x);
-        float ry = Mathf.Round(transform.position.y);
-        float rz = Mathf.Round(transform.position.z);
-
-        Vector3 rp = new Vector3(rx, ry, rz);
-
-        if (Vector3.Distance(transform.position, rp) < 0.05)
-        {
-            //Debug.Log("pos=" + transform.position);
-
-            if (!Physics.Raycast(transform.position, transform.right, out hit, 1))
-            {
-                //Debug.Log("right!");
-            }
-
-            if (!Physics.Raycast(transform.position, transform.right * -1, out hit, 1))
-            {
-                //Debug.Log("left!");
+                currDir = Direction.None;
+                ChangeDirection();
             }
         }
 
@@ -95,8 +55,10 @@ public class OnilController : MonoBehaviour
     void ChangeDirection()
     {
         int counter = 0;
-        while (true)
+        while (counter < 10)
         {
+            Debug.Log("count=" + counter);
+
             int dir = Random.Range(0, 4);
 
             RaycastHit hit;
@@ -104,7 +66,7 @@ public class OnilController : MonoBehaviour
             if (Physics.Raycast(transform.position, dirPos, out hit, 30))
             {
                 float distance = Vector3.Distance(transform.position, hit.transform.position);
-                if (distance > 1)
+                if (distance > 1.2f)
                 {
                     currDir = (Direction)dir;
                     Toward((Direction)dir);
@@ -112,12 +74,6 @@ public class OnilController : MonoBehaviour
                 }
             }
             counter++;
-
-            if (counter > 10)
-            {
-                StartCoroutine(Sleep(1));
-                counter = 0;
-            }
         }
     }
 
@@ -126,22 +82,19 @@ public class OnilController : MonoBehaviour
     {
         while (true)
         {
-            float sec = Random.Range(0, 6) + 1;
-            yield return new WaitForSeconds(sec);
+            yield return new WaitForSeconds(1);
 
             float rx = Mathf.Round(transform.position.x);
             float ry = Mathf.Round(transform.position.y);
             float rz = Mathf.Round(transform.position.z);
+
             Vector3 rp = new Vector3(rx, ry, rz);
 
-            Debug.Log("aaa");
-            if (Vector3.Distance(transform.position, rp) < 0.4)
+            if (Vector3.Distance(transform.position, rp) < 0.05)
             {
-                Debug.Log("bbb");
-                ChangeDirection();
+                Debug.Log("pos=" + transform.position);
+                //ChangeDirection();
             }
-
-            //Debug.Log("whim " + sec + "s dir=" + currDir);
         }
     }
 
@@ -174,12 +127,11 @@ public class OnilController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log("trigger enter?");
         if (other.tag == "Fire")
         {
-            controller.GetPoint(transform.position, 200);
-
+            controller.GetPoint(transform.position, 100);
             Destroy(gameObject);
         }
     }
-
 }

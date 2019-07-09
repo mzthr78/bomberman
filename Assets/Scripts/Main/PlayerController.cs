@@ -9,13 +9,7 @@ public class PlayerController : MonoBehaviour
     public GameObject bomberman;
     public GameObject mainCamera;
 
-    public Text FirePowerText;
-    public Text BombMaxText;
-    public Text BombRemainText;
-
     Animator animator;
-
-    bool freeze = false;
 
     float speed = 0.04f;
 
@@ -50,16 +44,6 @@ public class PlayerController : MonoBehaviour
         controller = GameObject.Find("GameController").GetComponent<GameController>();
     }
 
-    public void Freeze(bool b = true)
-    {
-        this.freeze = b;
-    }
-
-    public void UnFreeze()
-    {
-        Freeze(false);
-    }
-
     private void Start()
     {
         LoadPlayerStatus();
@@ -72,7 +56,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (this.freeze) return;
+        if (controller.IsFreeze()) return;
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -110,12 +94,7 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("IsWalk", false);
         }
 
-        FirePowerText.text = "FirePower = " + PlayerStatus[(int)PowerUpItem.Fire].ToString();
-        BombMaxText.text = "BombMax = " + PlayerStatus[(int)PowerUpItem.Bomb].ToString();
-
         BombRemain = PlayerStatus[(int)PowerUpItem.Bomb] - GameObject.FindGameObjectsWithTag("Bomb").Length;
-        BombRemainText.text = "BombRemain = " + BombRemain.ToString();
-
     }
 
     public void DebugPlayerStatus()
@@ -147,6 +126,7 @@ public class PlayerController : MonoBehaviour
 
         switch (vp)
         {
+            /*
             case ViewPoint.TPP:
             case ViewPoint.FPP:
                 switch (d)
@@ -165,6 +145,7 @@ public class PlayerController : MonoBehaviour
                         break;
                 }
                 break;
+            */
             default:
                 break;
         }
@@ -206,6 +187,7 @@ public class PlayerController : MonoBehaviour
             {
                 case "HardBlock":
                 case "SoftBlock":
+                case "Bomb":
                     return;
                 default:
                     break;
@@ -241,6 +223,21 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("IsWalk", true);
         transform.position += transform.forward * speed;
         //transform.Translate(pos.x * speed, pos.y * speed, pos.z * speed);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        switch (other.tag)
+        {
+            case "Enemy":
+            case "Fire":
+                Debug.Log("Death");
+                animator.SetBool("IsWalk", false);
+                controller.StageMiss();
+                break;
+            default:
+                break;
+        }
     }
 
 }
