@@ -11,7 +11,7 @@ public class BombController : MonoBehaviour
     public AudioClip ExplosionSE;
 
     float delta = 0;
-    float span = 4f;
+    float span = 3.5f;
 
     int[] dx = { 1,  0, -1, 0 };
     int[] dz = { 0, -1,  0, 1 };

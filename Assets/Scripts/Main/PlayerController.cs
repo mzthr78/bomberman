@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour
 
     Animator animator;
 
-    float speed = 0.04f;
+    float speed = 0.06f;
 
     Direction dir = Direction.None;
 

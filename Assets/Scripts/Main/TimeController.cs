@@ -8,7 +8,7 @@ public class TimeController : MonoBehaviour
     GameController controller;
 
     Text timeText;
-    public float time = 200;
+    public float time = 300;
 
     bool freeze = false;
 
