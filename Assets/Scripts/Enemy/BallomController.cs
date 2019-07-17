@@ -26,6 +26,7 @@ public class BallomController : MonoBehaviour
         if (controller.IsFreeze()) return;
 
         RaycastHit hit;
+        // ここ範囲チェックしないとあかん
         Vector3 dirPos = new Vector3(dx[(int)currDir], 0, dz[(int)currDir]);
         if (Physics.Raycast(transform.position, dirPos, out hit, 0.3f))
         {
