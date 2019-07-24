@@ -7,20 +7,22 @@ using UnityEngine.Networking;
 
 public class RankingController : MonoBehaviour
 {
-    public Button Return2TitleButton;
-    public Button TestButton;
-
     public GameObject RankLinePrefab;
     public GameObject Canvas;
+
+    private void Awake()
+    {
+        GameObject[] RankLines = GameObject.FindGameObjectsWithTag("Rank");
+        for (int i = 0; i < RankLines.Length; i++)
+        {
+            Destroy(RankLines[i]);
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        Return2TitleButton.onClick.AddListener(() => LoadTitleScene());
-
         StartCoroutine(GetRanking());
-
-        TestButton.onClick.AddListener(() => StartCoroutine(UpdateScore()));
 
         /*
         for (int i = 0; i < 10; i++)
@@ -29,6 +31,14 @@ public class RankingController : MonoBehaviour
             RankLine.transform.Translate(new Vector3(0, -50 * (i + 1), 0));
         }
         */
+    }
+
+    private void Update()
+    {
+        if (Input.GetMouseButtonDown(0) || Input.anyKeyDown)
+        {
+            SceneManager.LoadScene("TitleScene");
+        }
     }
 
     void LoadTitleScene()
