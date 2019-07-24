@@ -140,11 +140,6 @@ public class GameController : MonoBehaviour
         score = 0;
     }
 
-    public static int GetScore()
-    {
-        return score;
-    }
-
     public static ViewPoint GetViewPoint()
     {
         return viewPoint;
@@ -378,7 +373,8 @@ public class GameController : MonoBehaviour
         {
             for (int j = 0; j < lines[i].Length; j++)
             {
-                if (i == 0)                       { continue; } // 1行目
+                if (false)                             { continue; } // ダミーコード
+                else if (i == 0)                       { continue; } // 1行目
                 else if (i == (GetStageHeight() - 1))  { continue; } // 最終行
                 else if (j == 0)                       { continue; } // 1列目
                 else if (j == (GetStageWidth() - 1))   { continue; } // 最終列
@@ -491,16 +487,15 @@ public class GameController : MonoBehaviour
                 {
                     if (emptyCell[count] > -1)
                     {
-                        GameObject Enemy;
                         switch (emptyCell[count])
                         {
+                            /*
                             case 0:
-                                Enemy = Instantiate(BallomPrefab, Addr2Pos(addr), Quaternion.identity);
-                                Enemy.transform.parent = GameObject.Find("Ballom").transform;
                                 break;
+                            */
                             case 1:
-                                Enemy = Instantiate(OnilPrefab, Addr2Pos(addr), Quaternion.identity);
-                                Enemy.transform.parent = GameObject.Find("Onil").transform;
+                                GameObject Onil = Instantiate(OnilPrefab, Addr2Pos(addr), Quaternion.identity);
+                                Onil.transform.parent = GameObject.Find("Onil").transform;
                                 break;
                             /*
                             case 2:
@@ -517,8 +512,8 @@ public class GameController : MonoBehaviour
                                 break;
                             */
                             default:
-                                Enemy = Instantiate(BallomPrefab, Addr2Pos(addr), Quaternion.identity);
-                                Enemy.transform.parent = GameObject.Find("Ballom").transform;
+                                GameObject Ballom = Instantiate(BallomPrefab, Addr2Pos(addr), Quaternion.identity);
+                                Ballom.transform.parent = GameObject.Find("Ballom").transform;
                                 break;
                         }
                     }
@@ -654,6 +649,9 @@ public class GameController : MonoBehaviour
         aud.PlayOneShot(StageClearSE);
 
         yield return new WaitForSeconds(3.5f);
+
+        Debug.Log("stageNum+1=" + (stageNum + 1));
+        Debug.Log("maxStage=" + maxStageNum);
 
         if (stageNum + 1 <= maxStageNum)
         {

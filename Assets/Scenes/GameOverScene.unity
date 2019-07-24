@@ -241,9 +241,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd66d304c9f50479e9a3977f0a8cce7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InputPanelPrefab: {fileID: 7038081147029256854, guid: 4c8863dc108f548a69d37329004fbce8,
-    type: 3}
-  Canvas: {fileID: 2090883957}
 --- !u!4 &622837617
 Transform:
   m_ObjectHideFlags: 0
