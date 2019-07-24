@@ -5,22 +5,26 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.Networking;
 
-public class RankingController : MonoBehaviour
+public class RankingSceneController : MonoBehaviour
 {
-    public Button Return2TitleButton;
-    public Button TestButton;
-
     public GameObject RankLinePrefab;
     public GameObject Canvas;
+
+    private void Awake()
+    {
+        GameObject[] RankLines = GameObject.FindGameObjectsWithTag("Rank");
+        for (int i = 0; i < RankLines.Length; i++)
+        {
+            Destroy(RankLines[i]);
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        Return2TitleButton.onClick.AddListener(() => LoadTitleScene());
+        //Return2TitleButton.onClick.AddListener(() => LoadTitleScene());
 
         StartCoroutine(GetRanking());
-
-        TestButton.onClick.AddListener(() => StartCoroutine(UpdateScore()));
 
         /*
         for (int i = 0; i < 10; i++)
@@ -29,6 +33,14 @@ public class RankingController : MonoBehaviour
             RankLine.transform.Translate(new Vector3(0, -50 * (i + 1), 0));
         }
         */
+    }
+
+    private void Update()
+    {
+        if (Input.GetMouseButtonDown(0) || Input.anyKeyDown)
+        {
+            LoadTitleScene();
+        }
     }
 
     void LoadTitleScene()
@@ -64,7 +76,7 @@ public class RankingController : MonoBehaviour
             for (int i = 0; i < data.Length; i++)
             {
                 GameObject RankLine = Instantiate(RankLinePrefab, Canvas.transform);
-                RankLine.transform.Translate(0, -50 * i, 0);
+                RankLine.transform.Translate(0, -70 * i, 0);
                 //RankLine.transform.Translate(new Vector3(0, -50 * i, 0));
 
                 RankLine.transform.Find("Rank").GetComponent<Text>().text = (i + 1).ToString();
@@ -74,20 +86,6 @@ public class RankingController : MonoBehaviour
         }
     }
 
-    IEnumerator UpdateScore()
-    {
-        UnityWebRequest www = UnityWebRequest.Get("http://localhost:5000/update?name=XXX&score=999");
-        yield return www.SendWebRequest();
-
-        if (www.isNetworkError || www.isHttpError)
-        {
-            Debug.Log(www.error);
-        }
-        else
-        {
-            StartCoroutine(GetRanking());
-        }
-    }
 }
 
 [System.Serializable]
