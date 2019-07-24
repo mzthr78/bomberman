@@ -12,6 +12,7 @@ TagManager:
   - HardBlock
   - Door
   - Debug
+  - Rank
   layers:
   - Default
   - TransparentFX

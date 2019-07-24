@@ -140,6 +140,11 @@ public class GameController : MonoBehaviour
         score = 0;
     }
 
+    public static int GetScore()
+    {
+        return score;
+    }
+
     public static ViewPoint GetViewPoint()
     {
         return viewPoint;

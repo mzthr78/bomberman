@@ -5,12 +5,22 @@ using UnityEngine.SceneManagement;
 
 public class GameOverSceneController : MonoBehaviour
 {
+	public GameObject InputPanelPrefab;
+	public GameObject Canvas;
+
+	float delta = 0;
+	float span = 8;
+
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) || Input.anyKeyDown)
+        delta += Time.deltaTime;
+
+        if (delta > span)
         {
-            SceneManager.LoadScene("TitleScene");
+            delta = 0;
+
+            GameObject InputPanel = Instantiate(InputPanelPrefab, Canvas.transform);
         }
     }
 }
