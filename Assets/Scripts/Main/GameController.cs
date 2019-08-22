@@ -5,6 +5,12 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+public enum GameMode
+{
+    Normal = 0,
+    Namepu = 1,
+}
+
 public enum BMObj
 {
     None = -1,
@@ -31,7 +37,7 @@ public enum PowerUpItem
     Immortality = 8, // パーフェクトマン
 }
 
-public enum Enemy
+public enum EnemyNum
 {
     Ballom = 0,
     Onil = 1,
@@ -79,14 +85,12 @@ public class GameController : MonoBehaviour
     static int playerRemain = 0;
     static ViewPoint viewPoint;
 
-    public int SoftBlockNum = 0;
+    static int SoftBlockNum = 50;
     public int maxStageNum = 1;
 
     string ItemString = "012342213562235162523532358123762385731683653865378"; // Item(s) of Stage[0 .. 50]
 
     int[,] EnemiesOfStage = {
-      {3, 0, 0, 0, 0, 0, 0, 0 }, // Stage 01 ballom:6, onil:0, ...
-      {0, 3, 0, 0, 0, 0, 0, 0 }, // Stage 02 ballom:3, onil:3, ...
       {6, 0, 0, 0, 0, 0, 0, 0 }, // Stage 01 ballom:6, onil:0, ...
       {3, 3, 0, 0, 0, 0, 0, 0 }, // Stage 02 ballom:3, onil:3, ...
       {2, 2, 2, 0, 0, 0, 0, 0 }, // Stage 03 ballom:2, onil:2, daru:2, ...
@@ -109,6 +113,8 @@ public class GameController : MonoBehaviour
     public Text ScoreText;
     static int score;
     public Text PlayerRemainText;
+
+	static GameMode gameMode = GameMode.Normal;
 
     List<List<BMObj>> map = new List<List<BMObj>>();
 
@@ -135,6 +141,16 @@ public class GameController : MonoBehaviour
         stageNum = num;
     }
 
+    public static void SetSoftBlockNum(int num)
+	{
+        SoftBlockNum = num;
+	}
+
+    public static int GetSoftBlockNum()
+	{
+		return SoftBlockNum;
+	}
+
     public static void InitScore()
     {
         score = 0;
@@ -144,6 +160,16 @@ public class GameController : MonoBehaviour
     {
         return score;
     }
+
+    public static void SetGameMode(GameMode mode)
+	{
+		gameMode = mode;
+	}
+
+    public static GameMode GetGameMode()
+	{
+		return gameMode;
+	}
 
     public static ViewPoint GetViewPoint()
     {
@@ -236,7 +262,10 @@ public class GameController : MonoBehaviour
         this.freeze = false;
 	}
 
-	void Start()
+    public GameObject PausePanel;
+    public Button ReturnTitleButton;
+
+    void Start()
     {
         bool isAutoPlacement = true;
 
@@ -254,64 +283,35 @@ public class GameController : MonoBehaviour
 
         aud.Play();
 
-        /*
-        for (int i = 0; i < EnemiesOfStage.GetLength(1); i++)
-        {
-            Debug.Log(i + "(" + (Enemy)i + ")="  + EnemiesOfStage[GetStageNum() - 1, i]);
-        }
-        */
-
-        /*
-        for (int i = 0; i < EnemiesOfStage.GetLength(0); i++)
-        {
-            for (int j = 0; j < EnemiesOfStage.GetLength(1); j++)
-            {
-                Debug.Log("[" + i + "][" + j + "]" + EnemiesOfStage[i, j]);
-            }
-        }
-        */
-
-        /*
-		for (int i = 0; i < EnemiesOfStage.Count; i++)
-		{
-            string s = "";
-			for (int j = 0; j < EnemiesOfStage[i].Count; j++)
-			{
-                s += EnemiesOfStage[i][j];
-			}
-            Debug.Log(stage + "[" + i + "]" + s);
-		}
-        */
-
         PlayerRemainText.text = playerRemain.ToString();
+
+        PausePanel.SetActive(false);
+        ReturnTitleButton.onClick.AddListener(() => LoadTitleScene());
     }
 
     // Update is called once per frame
     void Update()
     {
-        /*
-        RaycastHit hit;
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out hit))
-        {
-            MousePosition.text = "(" + hit.point.x + ", " + hit.point.z + ")";
-
-            if (Input.GetMouseButtonDown(0))
-            {
-                Debug.Log(GetObj(new Vector3(Mathf.Round(hit.point.x), hit.point.y, Mathf.Round(hit.point.z))) + "(" + Mathf.Round(hit.point.x) + ", " + Mathf.Round(hit.point.z) + ")");
-
-                GameObject Ballom = Instantiate(BallomPrefab, new Vector3(hit.point.x, 0, hit.point.z), Quaternion.identity);
-                Ballom.transform.parent = GameObject.Find("Ballom").transform;
-            }
-        }
-        */
-
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             this.freeze = !this.freeze;
+
+            if (freeze)
+            {
+                PausePanel.SetActive(true);
+            }
+            else
+            {
+                PausePanel.SetActive(false);
+            }
         }
 
         ScoreText.text = score.ToString();
+    }
+
+    void LoadTitleScene()
+    {
+        SceneManager.LoadScene("TitleScene");
     }
 
     public BMObj GetObj(Vector3 pos)
@@ -460,6 +460,14 @@ public class GameController : MonoBehaviour
 
         // 敵情報の読み込み
         int enemyCount = 0;
+
+        if (gameMode == GameMode.Namepu)
+        {
+            EnemiesOfStage[0, 0] = 1;
+            EnemiesOfStage[1, 0] = 1;
+            EnemiesOfStage[1, 1] = 1;
+        }
+
         for (int i = 0; i < EnemiesOfStage.GetLength(1); i++)
         {
             for (int j = 0; j < EnemiesOfStage[GetStageNum() - 1, i]; j++)
@@ -467,6 +475,10 @@ public class GameController : MonoBehaviour
                 emptyCell[enemyCount] = i;
                 enemyCount++;
             }
+        }
+
+        if (gameMode == GameMode.Normal)
+        {
         }
 
         // データシャッフル
@@ -576,21 +588,6 @@ public class GameController : MonoBehaviour
 
             }
             map.Add(tmpLine);
-        }
-    }
-
-    // for Test
-    void PutEnemies()
-    {
-        int height = stage.GetComponent<StageController>().GetHeight();
-        int width = stage.GetComponent<StageController>().GetWidth();
-
-        for (int i = 0; i < height; i++)
-        {
-            for (int j = 0; j < width; j++)
-            {
-
-            }
         }
     }
 

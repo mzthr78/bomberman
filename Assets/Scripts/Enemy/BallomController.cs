@@ -65,8 +65,6 @@ public class BallomController : MonoBehaviour
         int counter = 0;
         while (counter < 10)
         {
-            Debug.Log("count=" + counter);
-
             int dir = Random.Range(0, 4);
 
             RaycastHit hit;
